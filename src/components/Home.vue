@@ -1,6 +1,6 @@
 <template>
     <div>
-        Home 组件
+        Home 组件 ,提交验证
         <el-button type="info" @click="logout">退出</el-button>
     </div>
 </template>
