@@ -30,7 +30,12 @@
               <span>{{item.name}}</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item :index="subItem.url" v-for="subItem in item.childMenu" :key="subItem.id" @click="saveNavState(subItem.url)">
+            <el-menu-item
+              :index="subItem.url"
+              v-for="subItem in item.childMenu"
+              :key="subItem.id"
+              @click="saveNavState(subItem.url)"
+            >
               <template slot="title">
                 <i :class="subItem.icon"></i>
                 <span>{{subItem.name}}</span>
@@ -55,13 +60,17 @@ export default {
       menulist: [],
       isCollapse: false,
       // 被激活的链接地址
-      activePath: ''
+      activePath: '',
+      loginname: {
+        name: ''
+      }
     }
   },
 
   created() {
     this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
+    this.loginname.name = window.sessionStorage.getItem('token')
   },
   methods: {
     logout() {
@@ -70,7 +79,9 @@ export default {
     },
     // 获取所有的菜单
     async getMenuList() {
-      const { data: res } = await this.$http.get('/menu/getmenu?name=admin')
+      const { data: res } = await this.$http.get('/menu/getmenu', {
+        params: this.loginname
+      })
       if (res.code !== 200) return this.$message.error(res.msg)
       this.menulist = res.data
       console.log(res)
