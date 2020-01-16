@@ -26,7 +26,12 @@
         <el-table-column label="昵称" prop="nickName"></el-table-column>
         <el-table-column label="电话" prop="mobile"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
-        <el-table-column label="状态" prop="status"></el-table-column>
+        <el-table-column label="状态" >
+          <template slot-scope="scope">
+            <p v-if="scope.row.status ===1 ">启用</p>
+            <p v-else-if="scope.row.status ===0">禁用</p>
+          </template>
+        </el-table-column>
         <el-table-column label="部门" prop="deptName"></el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="操作" width="180px">
