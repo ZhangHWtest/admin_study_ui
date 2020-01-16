@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import Index from '../components/Index.vue'
-import User from '../components/user/User.vue'
+import Users from '../components/user/User.vue'
 
 Vue.use(VueRouter)
 
@@ -16,7 +16,7 @@ const routes = [
     redirect: '/index',
     children: [
       { path: '/index', component: Index },
-      { path: '/user/list', component: User }
+      { path: '/user/list', component: Users }
     ]
   }
 ]

@@ -19,37 +19,77 @@
           <el-button type="primary">添加用户</el-button>
         </el-col>
       </el-row>
+      <!-- 用户列表区域-->
+      <el-table :data="userList" border stripe>
+        <el-table-column label="ID" prop="id"></el-table-column>
+        <el-table-column label="姓名" prop="name"></el-table-column>
+        <el-table-column label="昵称" prop="nick_name"></el-table-column>
+        <el-table-column label="电话" prop="mobile"></el-table-column>
+        <el-table-column label="邮箱" prop="email"></el-table-column>
+        <el-table-column label="状态" prop="status"></el-table-column>
+        <el-table-column label="部门" prop="dept_name"></el-table-column>
+        <el-table-column label="创建时间" prop="create_time"></el-table-column>
+        <el-table-column label="操作" width="180px">
+          <template slot-scope>
+            <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+            <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+              <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页-->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
 export default {
+  created() {
+    this.getUserList()
+  },
   data() {
     return {
       // 获取用户列表的参数对象
       queryInfo: {
         query: '',
         pagenum: 1,
-        pagesize: 2
+        pagesize: 10
       },
       userList: [],
       total: 0
     }
   },
-  cerated() {
-    this.getUserList()
-  },
   methods: {
     async getUserList() {
-      const { data: res } = await this.$http.get('/user/all', {
+      const { data: userRes } = await this.$http.get('/user/list', {
         params: this.queryInfo
       })
-      if (res.code !== 200) {
+      if (userRes.code !== 200) {
         return this.$message.error('获取用户列表失败！')
       }
-      this.userList = res.data.users
-      this.total = res.data.total
+      this.userList = userRes.data.users
+      this.total = userRes.data.total
+    },
+    // 监听pagesize改变的事件
+    handleSizeChange(newSize) {
+      this.queryInfo.pagesize = newSize
+      this.getUserList()
+    },
+    // 监听 页码值改变的事件
+    handleCurrentChange(newPage) {
+      this.queryInfo.pagenum = newPage
+      this.getUserList()
     }
   }
 }

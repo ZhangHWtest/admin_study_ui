@@ -66,7 +66,6 @@ export default {
       }
     }
   },
-
   created() {
     this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
@@ -116,6 +115,11 @@ export default {
     align-items: center;
     span {
       margin-left: 15px;
+    }
+    img{
+      width: 200px;
+      height: 100%;
+      background-color: #eee;
     }
   }
 }
