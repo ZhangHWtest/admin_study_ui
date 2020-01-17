@@ -11,8 +11,8 @@
       <!-- 搜索与添加区域-->
       <el-row :gutter="20">
         <el-col :span="7">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input placeholder="姓名/昵称/电话/邮箱" v-model="queryInfo.queryBody">
+            <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -20,20 +20,21 @@
         </el-col>
       </el-row>
       <!-- 用户列表区域-->
-      <el-table :data="userList" border stripe>
-        <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="姓名" prop="name"></el-table-column>
-        <el-table-column label="昵称" prop="nickName"></el-table-column>
-        <el-table-column label="电话" prop="mobile"></el-table-column>
-        <el-table-column label="邮箱" prop="email"></el-table-column>
-        <el-table-column label="状态" >
+      <el-table border :data="userList">
+        <template v-for="( item, index ) in tableHead">
+          <el-table-column
+            :prop="item.column_name"
+            :label="item.column_comment"
+            :key="index"
+            v-if="item.column_name"
+          ></el-table-column>
+        </template>
+        <el-table-column label="状态" width="50px">
           <template slot-scope="scope">
             <p v-if="scope.row.status ===1 ">启用</p>
             <p v-else-if="scope.row.status ===0">禁用</p>
           </template>
         </el-table-column>
-        <el-table-column label="部门" prop="deptName"></el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="操作" width="180px">
           <template slot-scope>
             <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
@@ -67,17 +68,27 @@ export default {
     return {
       // 获取用户列表的参数对象
       queryInfo: {
-        query: '',
-        pagenum: 1,
-        pagesize: 10
+        queryBody: '',
+        pageNum: 1,
+        pageSize: 10
       },
-      userList: [],
-      total: 0
+      total: 0,
+      tableHead: [
+        { column_name: 'id', column_comment: 'ID' },
+        { column_name: 'name', column_comment: '姓名' },
+        { column_name: 'nickName', column_comment: '昵称' },
+        { column_name: 'mobile', column_comment: '电话' },
+        { column_name: 'email', column_comment: '邮箱' },
+        { column_name: 'deptName', column_comment: '部门' },
+        { column_name: 'createTime', column_comment: '创建时间' },
+        { column_name: 'updateTime', column_comment: '修改时间' }
+      ],
+      userList: []
     }
   },
   methods: {
     async getUserList() {
-      const { data: userRes } = await this.$http.get('/user/list', {
+      const { data: userRes } = await this.$http.get('/user/find', {
         params: this.queryInfo
       })
       if (userRes.code !== 200) {
@@ -88,12 +99,12 @@ export default {
     },
     // 监听pagesize改变的事件
     handleSizeChange(newSize) {
-      this.queryInfo.pagesize = newSize
+      this.queryInfo.pageSize = newSize
       this.getUserList()
     },
     // 监听 页码值改变的事件
     handleCurrentChange(newPage) {
-      this.queryInfo.pagenum = newPage
+      this.queryInfo.pageNum = newPage
       this.getUserList()
     }
   }
