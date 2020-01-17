@@ -125,7 +125,6 @@ export default {
         { column_name: 'nickName', column_comment: '昵称' },
         { column_name: 'mobile', column_comment: '电话' },
         { column_name: 'email', column_comment: '邮箱' },
-        { column_name: 'deptName', column_comment: '部门' },
         { column_name: 'createTime', column_comment: '创建时间' },
         { column_name: 'updateTime', column_comment: '修改时间' }
       ],
