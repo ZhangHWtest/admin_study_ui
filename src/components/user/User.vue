@@ -64,26 +64,26 @@
     <!-- 添加用户对话框-->
     <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
       <!-- 内容主体区域-->
-      <el-form :model="addForm" :rules="addRulesForm" ref="addFormRef" label-width="70px">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="addForm.userName"></el-input>
+      <el-form :model="createUser" :rules="addRulesForm" ref="addFormRef" label-width="70px">
+        <el-form-item label="用户名" prop="name">
+          <el-input v-model="createUser.name"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="passWord">
-          <el-input v-model="addForm.passWord"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="createUser.password"></el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickName">
-          <el-input v-model="addForm.nickName"></el-input>
+          <el-input v-model="createUser.nickName"></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="mobile">
-          <el-input v-model="addForm.mobile"></el-input>
+          <el-input v-model="createUser.mobile"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="addForm.email"></el-input>
+          <el-input v-model="createUser.email"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addUser = false">确 定</el-button>
+        <el-button type="primary" @click="addUser">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -133,19 +133,19 @@ export default {
       // 控制添加用户对话框的显示隐藏
       addDialogVisible: false,
       // 添加用户的表单数据
-      addForm: {
-        userName: [],
-        passWord: [],
+      createUser: {
+        name: [],
+        password: [],
         nickName: [],
         mobile: [],
         email: []
       },
       // 添加用户表单的校验对象
       addRulesForm: {
-        userName: [
+        name: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
-        passWord: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
         nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
         mobile: [
           { required: true, message: '请输入电话', trigger: 'blur' },
@@ -188,7 +188,7 @@ export default {
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) return
         // 校验通过可以发起添加请求了
-        const { data: res } = await this.$http.post('/user/create', this.addForm)
+        const { data: res } = await this.$http.post('/user/create', this.createUser)
         if (res.code !== 200) {
           this.$message.error('添加用户失败！')
         }
