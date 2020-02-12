@@ -50,7 +50,12 @@
               @click="showEditDialog(scope.row.id)"
             ></el-button>
             <!-- 删除按钮 -->
-            <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              @click="removeUserById(scope.row.id)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -269,6 +274,30 @@ export default {
         // 提示信息
         this.$message.success('更新成功！')
       })
+    },
+    // 根据id删除
+    async removeUserById(id) {
+      // 弹窗询问是否删除
+      const confirmResult = await this.$confirm(
+        '此操作将永久删除该用户, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).catch(err => err)
+      if (confirmResult !== 'confirm') {
+        return this.$message.info('已取消删除！')
+      }
+      const { data: res } = await this.$http.delete('/user/deleteuser/' + id)
+      if (res.code !== 200) {
+        return this.$message.error('删除用户信息失败！')
+      }
+      // 提示信息
+      this.$message.success('删除成功！')
+      // 刷新数据
+      this.getUserList()
     }
   }
 }
