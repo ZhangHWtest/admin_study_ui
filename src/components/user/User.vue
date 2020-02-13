@@ -107,9 +107,6 @@
         <el-form-item label="用户名" prop="name">
           <el-input v-model="editForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="editForm.password"></el-input>
-        </el-form-item>
         <el-form-item label="昵称" prop="nickName">
           <el-input v-model="editForm.nickName"></el-input>
         </el-form-item>
