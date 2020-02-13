@@ -89,6 +89,12 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="createUser.email"></el-input>
         </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <template>
+            <el-radio v-model="createUser.status" label="0">禁用</el-radio>
+            <el-radio v-model="createUser.status" label="1">启用</el-radio>
+          </template>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
@@ -98,10 +104,13 @@
     <!-- 修改用户的对话框-->
     <el-dialog title="修改用戶" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
       <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="70px">
-        <el-form-item label="用户名">
+        <el-form-item label="用户名" prop="name">
           <el-input v-model="editForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="昵称">
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="editForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="昵称" prop="nickName">
           <el-input v-model="editForm.nickName"></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="mobile">
@@ -109,6 +118,12 @@
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="editForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <template>
+            <el-radio v-model="editForm.status" label="0">禁用</el-radio>
+            <el-radio v-model="editForm.status" label="1">启用</el-radio>
+          </template>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -167,7 +182,8 @@ export default {
         password: [],
         nickName: [],
         mobile: [],
-        email: []
+        email: [],
+        status: '0'
       },
       // 添加用户表单的校验对象
       addRulesForm: {
@@ -181,12 +197,16 @@ export default {
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           { validator: checkEmail, trigger: 'blur' }
-        ]
+        ],
+        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
       },
       // 控制修改用户对话框的显示与隐藏
       editDialogVisible: false,
       editForm: {},
       editFormRules: {
+        name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
         email: [
           { required: true, message: '请输入用户邮箱', trigger: 'blur' },
           { validator: checkEmail, trigger: 'blur' }
@@ -194,7 +214,8 @@ export default {
         mobile: [
           { required: true, message: '请输入用户电话', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
-        ]
+        ],
+        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
       }
     }
   },

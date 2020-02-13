@@ -23,9 +23,17 @@ import {
   Tooltip,
   Pagination,
   Dialog,
-  MessageBox
+  MessageBox,
+  Radio,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem
 } from 'element-ui'
 
+Vue.use(DropdownItem)
+Vue.use(DropdownMenu)
+Vue.use(Dropdown)
+Vue.use(Radio)
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)

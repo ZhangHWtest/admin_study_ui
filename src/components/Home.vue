@@ -6,7 +6,16 @@
         <img src="../assets/github.jpeg" alt />
         <span>您好！欢迎进入Admin后台</span>
       </div>
-      <el-button type="info" @click="logout">退出</el-button>
+      <el-dropdown>
+        <span class="el-dropdown-link">
+          {{loginname.name}}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item @click.native="logout()">退出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <!-- <el-button type="info" @click="logout">退出</el-button> -->
     </el-header>
     <!-- 页面主题区域 -->
     <el-container>
@@ -115,7 +124,7 @@ export default {
     span {
       margin-left: 15px;
     }
-    img{
+    img {
       width: 200px;
       height: 100%;
       background-color: #eee;
@@ -139,5 +148,14 @@ export default {
   text-align: center;
   letter-spacing: 0.5em;
   cursor: pointer;
+}
+.el-dropdown-link {
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff;
+}
+.el-icon-arrow-down {
+  color: #fff;
+  font-size: 15px;
 }
 </style>
