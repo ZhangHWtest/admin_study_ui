@@ -103,7 +103,7 @@
     </el-dialog>
     <!-- 修改用户的对话框-->
     <el-dialog title="修改用戶" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
-      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="70px">
+      <el-form ref="editFormRef" :model="editForm" :rules="addRulesForm" label-width="70px">
         <el-form-item label="用户名" prop="name">
           <el-input v-model="editForm.name"></el-input>
         </el-form-item>
@@ -199,20 +199,9 @@ export default {
       },
       // 控制修改用户对话框的显示与隐藏
       editDialogVisible: false,
-      editForm: {},
-      editFormRules: {
-        name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-        nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
-        email: [
-          { required: true, message: '请输入用户邮箱', trigger: 'blur' },
-          { validator: checkEmail, trigger: 'blur' }
-        ],
-        mobile: [
-          { required: true, message: '请输入用户电话', trigger: 'blur' },
-          { validator: checkMobile, trigger: 'blur' }
-        ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+      editForm: {
+        // 获取当前登录用户。作为修改人
+        lastUpdateBy: []
       }
     }
   },
@@ -275,6 +264,7 @@ export default {
     },
     // 修改用户信息并提交
     editUserInfo() {
+      this.editForm.lastUpdateBy = window.sessionStorage.getItem('token')
       this.$refs.editFormRef.validate(async valid => {
         if (!valid) return
         // 发起用户请求
