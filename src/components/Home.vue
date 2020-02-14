@@ -12,7 +12,7 @@
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="test">修改密码</el-dropdown-item>
+          <el-dropdown-item @click.native="updatePasword=true">修改密码</el-dropdown-item>
           <el-dropdown-item @click.native="logout()">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -58,6 +58,35 @@
       <el-main>
         <!-- 路由占位符-->
         <router-view />
+        <!-- 修改密码弹框-->
+        <el-dialog
+          title="修改密码"
+          :visible.sync="updatePasword"
+          width="50%"
+          :before-close="updatePaswordClose"
+        >
+          <!-- 内容主体区域-->
+          <el-form
+            :model="updatePaswordUser"
+            :rules="updatePaswordRulesForm"
+            ref="updatePaswordFormRef"
+            label-width="90px"
+          >
+            <el-form-item label="原始密码" prop="password">
+              <el-input v-model="updatePaswordUser.password"></el-input>
+            </el-form-item>
+            <el-form-item label="新密码" prop="newPassword">
+              <el-input v-model="updatePaswordUser.newPassword"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="checkPassword">
+              <el-input v-model="updatePaswordUser.checkPassword"></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="updatePasword = false">取 消</el-button>
+            <el-button type="primary" @click.native="updatePaswordMethod()">确 定</el-button>
+          </span>
+        </el-dialog>
       </el-main>
     </el-container>
   </el-container>
@@ -73,6 +102,20 @@ export default {
       activePath: '',
       loginname: {
         name: ''
+      },
+      updatePasword: false,
+      updatePaswordUser: {
+        name: [],
+        password: [],
+        newPassword: [],
+        checkPassword: []
+      },
+      updatePaswordRulesForm: {
+        password: [{ required: true, message: '原始密码', trigger: 'blur' }],
+        newPassword: [{ required: true, message: '新密码', trigger: 'blur' }],
+        checkPassword: [
+          { required: true, message: '再次确认密码', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -102,6 +145,29 @@ export default {
     saveNavState(activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
+    },
+    updatePaswordClose() {
+      this.$refs.updatePaswordFormRef.resetFields()
+    },
+    updatePaswordMethod() {
+      this.$refs.updatePaswordFormRef.validate(async valid => {
+        if (!valid) return
+        this.updatePaswordUser.name = window.sessionStorage.getItem('token')
+        if (this.updatePaswordUser.newPassword !== this.updatePaswordUser.checkPassword) return this.$message.error('请检查输入！')
+        // 校验通过可以发起添加请求了
+        const { data: res } = await this.$http.post(
+          '/user/updatepassword',
+          this.updatePaswordUser
+        )
+        if (res.code !== 200) {
+          this.$message.error('修改失败！')
+        }
+        this.$message.success('修改成功！')
+        window.sessionStorage.clear()
+        this.$router.push('/login')
+        // 添加成功关闭对话框
+        // this.updatePasword = false
+      })
     }
   }
 }
