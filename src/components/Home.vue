@@ -16,7 +16,6 @@
           <el-dropdown-item @click.native="logout()">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <!-- <el-button type="info" @click="logout">退出</el-button> -->
     </el-header>
     <!-- 页面主题区域 -->
     <el-container>
