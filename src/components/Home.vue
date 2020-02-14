@@ -63,7 +63,7 @@
           title="修改密码"
           :visible.sync="updatePasword"
           width="50%"
-          :before-close="updatePaswordClose"
+          @close="updatePaswordClose"
         >
           <!-- 内容主体区域-->
           <el-form
@@ -162,11 +162,9 @@ export default {
         if (res.code !== 200) {
           this.$message.error('修改失败！')
         }
-        this.$message.success('修改成功！')
+        this.$message.success('修改成功，请重新登录！')
         window.sessionStorage.clear()
         this.$router.push('/login')
-        // 添加成功关闭对话框
-        // this.updatePasword = false
       })
     }
   }
