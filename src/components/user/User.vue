@@ -208,9 +208,10 @@ export default {
   },
   methods: {
     async getUserList() {
-      const { data: userRes } = await this.$http.get('/user/find', {
-        params: this.queryInfo
-      })
+      // const { data: userRes } = await this.$http.get('/user/find', {
+      //   params: this.queryInfo
+      // })
+      const { data: userRes } = await this.$api.user.findPage(this.queryInfo)
       if (userRes.code !== 200) {
         return this.$message.error('获取用户列表失败！')
       }

@@ -5,7 +5,9 @@ import './plugins/element.js'
 import './assets/css/global.css'
 import axios from 'axios'
 import '@/assets/icon/iconfont.css'
+import api from './http'
 
+Vue.use(api)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 axios.defaults.baseURL = process.env.VUE_APP_URL

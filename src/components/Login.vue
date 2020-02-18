@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
 export default {
   data() {
     return {
@@ -43,21 +44,21 @@ export default {
   },
   methods: {
     resetLoginForm() {
-      // console.log(this)
       this.$refs.loginFormRef.resetFields()
     },
     login() {
       this.$refs.loginFormRef.validate(async valid => {
-        // console.log(valid)
         if (!valid);
-        const { data: res } = await this.$http.post(
-          '/user/login',
-          this.loginForm
-        )
+        // const { data: res } = await this.$http.post(
+        //   '/user/login',
+        //   this.loginForm
+        // )
+        const { data: res } = await this.$api.login.login(this.loginForm)
         // eslint-disable-next-line curly
         if (res.code !== 200)
           return this.$message.error('登录失败！请检查账号信息！')
         window.sessionStorage.setItem('token', res.data.name)
+        Cookies.set('token', res.data.token)
         this.$router.push('/home')
       })
     }
