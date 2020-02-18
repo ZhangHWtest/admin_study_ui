@@ -4,6 +4,7 @@ import router from './router'
 import './plugins/element.js'
 import './assets/css/global.css'
 import axios from 'axios'
+import '@/assets/icon/iconfont.css'
 
 Vue.prototype.$http = axios
 axios.defaults.baseURL = 'http://10.20.19.38:9090'

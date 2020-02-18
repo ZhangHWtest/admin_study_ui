@@ -1,0 +1,44 @@
+{
+  "id": "1644350",
+  "name": "admin_study_ui",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "7549350",
+      "name": "用户",
+      "font_class": "RectangleCopy1",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "7549362",
+      "name": "设置/管理",
+      "font_class": "RectangleCopy2",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "7551132",
+      "name": "人群",
+      "font_class": "RectangleCopy3",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "7551133",
+      "name": "人群管理",
+      "font_class": "RectangleCopy4",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
+      "icon_id": "7551131",
+      "name": "用户管理",
+      "font_class": "RectangleCopy",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    }
+  ]
+}

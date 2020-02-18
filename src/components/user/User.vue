@@ -168,7 +168,8 @@ export default {
         { column_name: 'mobile', column_comment: '电话' },
         { column_name: 'email', column_comment: '邮箱' },
         { column_name: 'createTime', column_comment: '创建时间' },
-        { column_name: 'updateTime', column_comment: '修改时间' }
+        { column_name: 'updateTime', column_comment: '修改时间' },
+        { column_name: 'lastUpdateBy', column_comment: '最后修改人' }
       ],
       userList: [],
       // 控制添加用户对话框的显示隐藏

@@ -72,13 +72,13 @@
             label-width="90px"
           >
             <el-form-item label="原始密码" prop="password">
-              <el-input v-model="updatePaswordUser.password"></el-input>
+              <el-input v-model="updatePaswordUser.password" type="password"></el-input>
             </el-form-item>
             <el-form-item label="新密码" prop="newPassword">
-              <el-input v-model="updatePaswordUser.newPassword"></el-input>
+              <el-input v-model="updatePaswordUser.newPassword" type="password"></el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="checkPassword">
-              <el-input v-model="updatePaswordUser.checkPassword"></el-input>
+              <el-input v-model="updatePaswordUser.checkPassword" type="password"></el-input>
             </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
@@ -169,7 +169,6 @@ export default {
   }
 }
 </script>
-
 <style lang="less" scoped>
 .home-container {
   height: 100%;
