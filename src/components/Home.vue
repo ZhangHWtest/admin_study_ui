@@ -130,9 +130,10 @@ export default {
     },
     // 获取所有的菜单
     async getMenuList() {
-      const { data: res } = await this.$http.get('/menu/getmenu', {
-        params: this.loginname
-      })
+      // const { data: res } = await this.$http.get('/menu/getmenu', {
+      //   params: this.loginname
+      // })
+      const { data: res } = await this.$api.menu.findNavTree(this.loginname)
       if (res.code !== 200) return this.$message.error(res.msg)
       this.menulist = res.data
     },
@@ -154,10 +155,11 @@ export default {
         this.updatePaswordUser.name = window.sessionStorage.getItem('token')
         if (this.updatePaswordUser.newPassword !== this.updatePaswordUser.checkPassword) return this.$message.error('请检查输入！')
         // 校验通过可以发起添加请求了
-        const { data: res } = await this.$http.post(
-          '/user/updatepassword',
-          this.updatePaswordUser
-        )
+        // const { data: res } = await this.$http.post(
+        //   '/user/updatepassword',
+        //   this.updatePaswordUser
+        // )
+        const { data: res } = await this.$api.user.updatepassword(this.updatePaswordUser)
         if (res.code !== 200) {
           this.$message.error('修改失败！')
         }

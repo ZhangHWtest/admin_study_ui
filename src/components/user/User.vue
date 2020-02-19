@@ -237,10 +237,11 @@ export default {
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) return
         // 校验通过可以发起添加请求了
-        const { data: res } = await this.$http.post(
-          '/user/create',
-          this.createUser
-        )
+        // const { data: res } = await this.$http.post(
+        //   '/user/create',
+        //   this.createUser
+        // )
+        const { data: res } = await this.$api.user.create(this.createUser)
         if (res.code !== 200) {
           this.$message.error('添加用户失败！')
         }
@@ -253,7 +254,8 @@ export default {
     },
     // 展示编辑用户的对话框
     async showEditDialog(id) {
-      const { data: res } = await this.$http.get('/user/getuserbyid/' + id)
+      // const { data: res } = await this.$http.get('/user/getuserbyid/' + id)
+      const { data: res } = await this.$api.user.getuserbyid(id)
       if (res.code !== 200) {
         return this.$message.error('查询用户信息失败！')
       }
@@ -270,10 +272,11 @@ export default {
       this.$refs.editFormRef.validate(async valid => {
         if (!valid) return
         // 发起用户请求
-        const { data: res } = await this.$http.post(
-          '/user/update',
-          this.editForm
-        )
+        // const { data: res } = await this.$http.post(
+        //   '/user/update',
+        //   this.editForm
+        // )
+        const { data: res } = await this.$api.user.update(this.editForm)
         if (res.code !== 200) {
           return this.$message.error('修改用户信息失败！')
         }
@@ -300,7 +303,8 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除！')
       }
-      const { data: res } = await this.$http.delete('/user/deleteuser/' + id)
+      // const { data: res } = await this.$http.delete('/user/deleteuser/' + id)
+      const { data: res } = await this.$api.user.deleteuser(id)
       if (res.code !== 200) {
         return this.$message.error('删除用户信息失败！')
       }

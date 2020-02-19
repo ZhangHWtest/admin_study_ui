@@ -1,6 +1,6 @@
 export default {
-  method: 'get',
-  baseURL: 'process.env.VUE_APP_URL',
+  // method: 'get',
+  // baseURL: process.env.VUE_APP_URL,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   },
