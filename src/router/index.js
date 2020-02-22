@@ -7,6 +7,7 @@ import Users from '../components/user/User.vue'
 import Role from '../components/role/Role.vue'
 import Dept from '../components/dept/Dept.vue'
 import Limits from '../components/limits/Limits.vue'
+import Charts from '../components/charts/Charts.vue'
 
 Vue.use(VueRouter)
 
@@ -22,7 +23,8 @@ const routes = [
       { path: '/user/list', component: Users },
       { path: '/user/role', component: Role },
       { path: '/user/dept', component: Dept },
-      { path: '/user/limits', component: Limits }
+      { path: '/user/limits', component: Limits },
+      { path: '/charts/list', component: Charts }
     ]
   }
 ]
