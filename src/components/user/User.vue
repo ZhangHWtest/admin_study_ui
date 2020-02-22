@@ -313,6 +313,26 @@ export default {
       this.$message.success('删除成功！')
       // 刷新数据
       this.getUserList()
+    },
+    // 导出数据
+    exportData() {
+      require.ensure([], () => {
+        // const { export_json_to_excel } = require('@/vendor/Export2Excel')
+        const { export_json_to_excel } = require('../../vendor/Export2Excel')
+        // 要输出的表头
+        const tHeader = ['id', '姓名', '昵称', '电话', '邮箱', '创建时间', '修改时间', '最后修改人']
+        // 表头对应的内容, 会从下行定义的 list 里去找相应的数据
+        const filterVal = ['id', 'name', 'nickName', 'mobile', 'email', 'createTime', 'updateTime', 'lastUpdateBy']
+        // 数据来源
+        const list = this.userList
+        const data = this.formatJson(filterVal, list)
+        // fileName: 要导出的表格名称
+        export_json_to_excel(tHeader, data, 'fileName')
+      })
+    },
+
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
     }
   }
 }
