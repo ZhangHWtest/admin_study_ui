@@ -9,4 +9,4 @@ export default {
   // 携带凭证
   withCredentials: true,
   responseType: 'json'
-};
+}

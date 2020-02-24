@@ -36,9 +36,9 @@
         >
           <!-- 一级菜单 -->
           <el-submenu
-            :index="item.id + ''"
             v-for="item in menulist"
             :key="item.id"
+            :index="item.id + ''"
           >
             <template slot="title">
               <i :class="item.icon"></i>
@@ -46,9 +46,9 @@
             </template>
             <!-- 二级菜单 -->
             <el-menu-item
-              :index="subItem.url"
               v-for="subItem in item.childMenu"
               :key="subItem.id"
+              :index="subItem.url"
               @click="saveNavState(subItem.url)"
             >
               <template slot="title">
@@ -72,9 +72,9 @@
         >
           <!-- 内容主体区域-->
           <el-form
+            ref="updatePaswordFormRef"
             :model="updatePaswordUser"
             :rules="updatePaswordRulesForm"
-            ref="updatePaswordFormRef"
             label-width="90px"
           >
             <el-form-item label="原始密码" prop="password">
