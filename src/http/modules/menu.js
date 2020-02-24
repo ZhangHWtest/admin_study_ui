@@ -1,4 +1,4 @@
-import axios from '../axios'
+import axios from '../axios';
 
 /*
  * 菜单列表
@@ -10,5 +10,5 @@ export const findNavTree = params => {
     url: '/menu/getmenu',
     method: 'get',
     params
-  })
-}
+  });
+};
