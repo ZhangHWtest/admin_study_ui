@@ -8,11 +8,13 @@
       </div>
       <el-dropdown>
         <span class="el-dropdown-link">
-          {{loginname.name}}
+          {{ loginname.name }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="updatePasword=true">修改密码</el-dropdown-item>
+          <el-dropdown-item @click.native="updatePasword = true"
+            >修改密码</el-dropdown-item
+          >
           <el-dropdown-item @click.native="logout()">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -33,10 +35,14 @@
           :default-active="activePath"
         >
           <!-- 一级菜单 -->
-          <el-submenu :index="item.id + '' " v-for="item in menulist" :key="item.id">
+          <el-submenu
+            :index="item.id + ''"
+            v-for="item in menulist"
+            :key="item.id"
+          >
             <template slot="title">
               <i :class="item.icon"></i>
-              <span>{{item.name}}</span>
+              <span>{{ item.name }}</span>
             </template>
             <!-- 二级菜单 -->
             <el-menu-item
@@ -47,7 +53,7 @@
             >
               <template slot="title">
                 <i :class="subItem.icon"></i>
-                <span>{{subItem.name}}</span>
+                <span>{{ subItem.name }}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -72,18 +78,29 @@
             label-width="90px"
           >
             <el-form-item label="原始密码" prop="password">
-              <el-input v-model="updatePaswordUser.password" type="password"></el-input>
+              <el-input
+                v-model="updatePaswordUser.password"
+                type="password"
+              ></el-input>
             </el-form-item>
             <el-form-item label="新密码" prop="newPassword">
-              <el-input v-model="updatePaswordUser.newPassword" type="password"></el-input>
+              <el-input
+                v-model="updatePaswordUser.newPassword"
+                type="password"
+              ></el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="checkPassword">
-              <el-input v-model="updatePaswordUser.checkPassword" type="password"></el-input>
+              <el-input
+                v-model="updatePaswordUser.checkPassword"
+                type="password"
+              ></el-input>
             </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
             <el-button @click="updatePasword = false">取 消</el-button>
-            <el-button type="primary" @click.native="updatePaswordMethod()">确 定</el-button>
+            <el-button type="primary" @click.native="updatePaswordMethod()"
+              >确 定</el-button
+            >
           </span>
         </el-dialog>
       </el-main>
@@ -153,13 +170,19 @@ export default {
       this.$refs.updatePaswordFormRef.validate(async valid => {
         if (!valid) return
         this.updatePaswordUser.name = window.sessionStorage.getItem('token')
-        if (this.updatePaswordUser.newPassword !== this.updatePaswordUser.checkPassword) return this.$message.error('请检查输入！')
+        if (
+          this.updatePaswordUser.newPassword !==
+          this.updatePaswordUser.checkPassword
+        )
+          return this.$message.error('请检查输入！')
         // 校验通过可以发起添加请求了
         // const { data: res } = await this.$http.post(
         //   '/user/updatepassword',
         //   this.updatePaswordUser
         // )
-        const { data: res } = await this.$api.user.updatepassword(this.updatePaswordUser)
+        const { data: res } = await this.$api.user.updatepassword(
+          this.updatePaswordUser
+        )
         if (res.code !== 200) {
           this.$message.error('修改失败！')
         }

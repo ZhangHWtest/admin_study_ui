@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "eslint-fix": "eslint src/**/**/*.vue --fix",
+    "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\""
   },
   "dependencies": {
     "axios": "^0.19.1",
@@ -28,9 +30,13 @@
     "babel-eslint": "^10.0.3",
     "babel-plugin-component": "^1.1.1",
     "eslint": "^5.16.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
+    "prettier": "^1.19.1",
+    "prettier-eslint-cli": "^5.0.0",
     "sass-loader": "^7.3.1",
     "script-loader": "^0.7.2",
     "vue-cli-plugin-element": "^1.0.1",

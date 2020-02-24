@@ -27,9 +27,13 @@ import {
   Radio,
   Dropdown,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  Select,
+  Option
 } from 'element-ui'
 
+Vue.use(Option)
+Vue.use(Select)
 Vue.use(DropdownItem)
 Vue.use(DropdownMenu)
 Vue.use(Dropdown)

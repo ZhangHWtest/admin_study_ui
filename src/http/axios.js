@@ -28,7 +28,10 @@ export default function $axios(options) {
         // 请求发生错误时
         console.log('request:', error)
         // 判断请求超时
-        if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
+        if (
+          error.code === 'ECONNABORTED' &&
+          error.message.indexOf('timeout') !== -1
+        ) {
           console.log('timeout请求超时')
         }
         // 需要重定向到错误页面
@@ -95,11 +98,13 @@ export default function $axios(options) {
       }
     )
     // 请求处理
-    instance(options).then(res => {
-      resolve(res)
-      return false
-    }).catch(error => {
-      reject(error)
-    })
+    instance(options)
+      .then(res => {
+        resolve(res)
+        return false
+      })
+      .catch(error => {
+        reject(error)
+      })
   })
 }

@@ -10,7 +10,7 @@
     <el-card>
       <div>
         <h2>vue中插入highcharts示例</h2>
-          <highcharts :options="chartOptions" :callback="myCallback"></highcharts>
+        <highcharts :options="chartOptions" :callback="myCallback"></highcharts>
       </div>
     </el-card>
   </div>
