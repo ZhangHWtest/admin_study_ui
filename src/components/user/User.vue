@@ -30,12 +30,12 @@
         </el-col>
         <el-col :span="5">
           <el-date-picker
-            v-model="queryInfo.timeValue"
+            v-model="timeValue"
             type="datetimerange"
             align="right"
             start-placeholder="创建开始日期"
             end-placeholder="创建结束日期"
-            value-format="yyyy:MM:dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
             :default-time="['00:00:00', '24:00:00']"
           ></el-date-picker>
         </el-col>
@@ -196,11 +196,13 @@ export default {
       cb(new Error('请输入正确的手机号！'))
     }
     return {
+      timeValue: '',
       // 获取用户列表的参数对象
       queryInfo: {
         mes: '',
         status: '',
-        timeValue: '',
+        startTime: '',
+        endTime: '',
         pageNum: 1,
         pageSize: 10
       },
@@ -268,6 +270,8 @@ export default {
       // const { data: userRes } = await this.$http.get('/user/find', {
       //   params: this.queryInfo
       // })
+      this.queryInfo.startTime = this.timeValue[0]
+      this.queryInfo.endTime = this.timeValue[1]
       const { data: userRes } = await this.$api.user.findPage(this.queryInfo)
       if (userRes.code !== 200) {
         return this.$message.error('获取用户列表失败！')
