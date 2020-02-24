@@ -14,7 +14,7 @@ export const updatepassword = data => {
 }
 
 // 分页查询
-export const findPage = (params) => {
+export const findPage = params => {
   return axios({ url: '/user/find', method: 'get', params })
 }
 
@@ -28,7 +28,7 @@ export const create = data => {
 }
 
 // 根据id查询，展示编辑用户的对话框
-export const getuserbyid = (id) => {
+export const getuserbyid = id => {
   return axios({ url: '/user/getuserbyid/' + id, method: 'get' })
 }
 
@@ -42,7 +42,7 @@ export const update = data => {
 }
 
 // 删除用户
-export const deleteuser = (id) => {
+export const deleteuser = id => {
   return axios({
     url: '/user/deleteuser/' + id,
     method: 'delete'

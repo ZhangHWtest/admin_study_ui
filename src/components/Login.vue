@@ -6,14 +6,26 @@
         <img src="../assets/logo.png" alt />
       </div>
       <!-- 登录表单区域 -->
-      <el-form :model="loginForm" class="login_form" :rules="loginFormRules" ref="loginFormRef">
+      <el-form
+        :model="loginForm"
+        class="login_form"
+        :rules="loginFormRules"
+        ref="loginFormRef"
+      >
         <!-- 用户名 -->
         <el-form-item prop="name">
-          <el-input v-model="loginForm.name" prefix-icon="el-icon-user"></el-input>
+          <el-input
+            v-model="loginForm.name"
+            prefix-icon="el-icon-user"
+          ></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+          <el-input
+            v-model="loginForm.password"
+            prefix-icon="el-icon-lock"
+            type="password"
+          ></el-input>
         </el-form-item>
         <!-- 按钮 -->
         <el-form-item class="btns">
@@ -35,9 +47,7 @@ export default {
         password: '123456'
       },
       loginFormRules: {
-        name: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
-        ],
+        name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
     }

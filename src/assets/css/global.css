@@ -19,3 +19,7 @@ body,
 .el-pagination {
     margin-top: 15px;
 }
+.el-col {
+    padding-left: 5px;
+    padding-right: 5px;
+}

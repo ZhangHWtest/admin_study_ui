@@ -2,7 +2,8 @@ const port = 8080
 // dev port
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/production-sub-path/' : '/',
+  publicPath:
+    process.env.NODE_ENV === 'production' ? '/production-sub-path/' : '/',
   outputDir: 'admin_study_ui',
   assetsDir: 'assets',
   lintOnSave: process.env.NODE_ENV === 'development',

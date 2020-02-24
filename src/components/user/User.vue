@@ -9,24 +9,40 @@
     <!-- 卡片视图区域-->
     <el-card>
       <!-- 搜索与添加区域-->
-      <el-row :gutter="20">
-        <el-col :span="7">
+      <el-row :gutter="30">
+        <el-col :span="6">
           <el-input
             placeholder="姓名/昵称/电话/邮箱"
             v-model="queryInfo.queryBody"
             clearable
             @clear="getUserList"
-          >
-            <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
-          </el-input>
+          ></el-input>
         </el-col>
-        <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible=true">添加用户</el-button>
+        <el-col :span="3">
+          <el-select
+            v-model="selectValue"
+            placeholder="状态"
+            @blur="getUserList"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="7">
+          <el-button type="primary" plain @click="getUserList">搜索</el-button>
+          <el-button plain @click="exportData">导出</el-button>
+          <el-button type="primary" @click="addDialogVisible = true"
+            >添加用户</el-button
+          >
         </el-col>
       </el-row>
       <!-- 用户列表区域-->
       <el-table border :data="userList">
-        <template v-for="( item, index ) in tableHead">
+        <template v-for="(item, index) in tableHead">
           <el-table-column
             :prop="item.column_name"
             :label="item.column_comment"
@@ -36,8 +52,8 @@
         </template>
         <el-table-column label="状态" width="50px">
           <template slot-scope="scope">
-            <p v-if="scope.row.status ===1 ">启用</p>
-            <p v-else-if="scope.row.status ===0">禁用</p>
+            <p v-if="scope.row.status === 1">启用</p>
+            <p v-else-if="scope.row.status === 0">禁用</p>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120px">
@@ -71,9 +87,19 @@
       ></el-pagination>
     </el-card>
     <!-- 添加用户对话框-->
-    <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+    <el-dialog
+      title="添加用户"
+      :visible.sync="addDialogVisible"
+      width="50%"
+      @close="addDialogClosed"
+    >
       <!-- 内容主体区域-->
-      <el-form :model="createUser" :rules="addRulesForm" ref="addFormRef" label-width="70px">
+      <el-form
+        :model="createUser"
+        :rules="addRulesForm"
+        ref="addFormRef"
+        label-width="70px"
+      >
         <el-form-item label="用户名" prop="name">
           <el-input v-model="createUser.name"></el-input>
         </el-form-item>
@@ -102,8 +128,18 @@
       </span>
     </el-dialog>
     <!-- 修改用户的对话框-->
-    <el-dialog title="修改用戶" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
-      <el-form ref="editFormRef" :model="editForm" :rules="addRulesForm" label-width="70px">
+    <el-dialog
+      title="修改用戶"
+      :visible.sync="editDialogVisible"
+      width="50%"
+      @close="editDialogClosed"
+    >
+      <el-form
+        ref="editFormRef"
+        :model="editForm"
+        :rules="addRulesForm"
+        label-width="70px"
+      >
         <el-form-item label="用户名" prop="name">
           <el-input v-model="editForm.name"></el-input>
         </el-form-item>
@@ -203,7 +239,18 @@ export default {
       editForm: {
         // 获取当前登录用户。作为修改人
         lastUpdateBy: []
-      }
+      },
+      options: [
+        {
+          value: '0',
+          label: '启用'
+        },
+        {
+          value: '1',
+          label: '禁用'
+        }
+      ],
+      selectValue: ''
     }
   },
   methods: {
@@ -312,10 +359,47 @@ export default {
       this.$message.success('删除成功！')
       // 刷新数据
       this.getUserList()
+    },
+    // 导出数据
+    exportData() {
+      require.ensure([], () => {
+        // 标红是没有驼峰命名
+        // const { export_json_to_excel } = require('@/vendor/Export2Excel')
+        const { exportJsonToExcel } = require('../../vendor/Export2Excel')
+        // 要输出的表头
+        const tHeader = [
+          'id',
+          '姓名',
+          '昵称',
+          '电话',
+          '邮箱',
+          '创建时间',
+          '修改时间',
+          '最后修改人'
+        ]
+        // 表头对应的内容, 会从下行定义的 list 里去找相应的数据
+        const filterVal = [
+          'id',
+          'name',
+          'nickName',
+          'mobile',
+          'email',
+          'createTime',
+          'updateTime',
+          'lastUpdateBy'
+        ]
+        // 数据来源
+        const list = this.userList
+        const data = this.formatJson(filterVal, list)
+        // fileName: 要导出的表格名称
+        exportJsonToExcel(tHeader, data, 'fileName' + new Date())
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

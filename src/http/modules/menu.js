@@ -5,7 +5,7 @@ import axios from '../axios'
  */
 
 // 获取所有菜单
-export const findNavTree = (params) => {
+export const findNavTree = params => {
   return axios({
     url: '/menu/getmenu',
     method: 'get',

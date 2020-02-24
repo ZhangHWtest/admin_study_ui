@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11488154",
+      "name": "trading volume",
+      "font_class": "tradingvolume",
+      "unicode": "e76a",
+      "unicode_decimal": 59242
+    },
+    {
+      "icon_id": "12012167",
+      "name": "trading data",
+      "font_class": "tradingdata",
+      "unicode": "e7b5",
+      "unicode_decimal": 59317
+    },
+    {
       "icon_id": "7549350",
       "name": "用户",
       "font_class": "RectangleCopy1",
