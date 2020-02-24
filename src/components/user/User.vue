@@ -177,6 +177,7 @@
 </template>
 
 <script>
+// import { formTime } from '../../vendor/FormTime'
 export default {
   data() {
     // 验证邮箱的自定义规则
@@ -253,11 +254,11 @@ export default {
       options: [
         {
           value: '0',
-          label: '启用'
+          label: '禁用'
         },
         {
           value: '1',
-          label: '禁用'
+          label: '启用'
         }
       ]
     }
@@ -405,8 +406,9 @@ export default {
         // 数据来源
         const list = this.userList
         const data = this.formatJson(filterVal, list)
+        const time = this.$moment(new Date()).format('YYYY-MM-DD')
         // fileName: 要导出的表格名称
-        exportJsonToExcel(tHeader, data, 'users' + this.time)
+        exportJsonToExcel(tHeader, data, 'usersList' + time)
       })
     },
     formatJson(filterVal, jsonData) {
