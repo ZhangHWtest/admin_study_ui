@@ -42,7 +42,7 @@
           >
             <template slot="title">
               <i :class="item.icon"></i>
-              <span>{{ item.name }}</span>
+              <span class="sider-bar-title">{{ item.name }}</span>
             </template>
             <!-- 二级菜单 -->
             <el-menu-item
@@ -53,7 +53,7 @@
             >
               <template slot="title">
                 <i :class="subItem.icon"></i>
-                <span>{{ subItem.name }}</span>
+                <span class="sider-bar-title">{{ subItem.name }}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -245,5 +245,8 @@ export default {
 .el-icon-arrow-down {
   color: #fff;
   font-size: 15px;
+}
+.sider-bar-title {
+  margin-left: 6px;
 }
 </style>
