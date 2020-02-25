@@ -411,7 +411,7 @@ export default {
         const data = this.formatJson(filterVal, list)
         const time = this.$moment(new Date()).format('YYYY-MM-DD')
         // fileName: 要导出的表格名称
-        exportJsonToExcel(tHeader, data, 'usersList' + time)
+        exportJsonToExcel(tHeader, data, 'UsersList' + time)
       })
     },
     formatJson(filterVal, jsonData) {
