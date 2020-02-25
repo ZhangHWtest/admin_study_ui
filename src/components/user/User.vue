@@ -10,20 +10,16 @@
     <el-card>
       <!-- 搜索与添加区域-->
       <el-row :gutter="30">
-        <el-col :span="6">
+        <el-col :span="5">
           <el-input
+            v-model="queryInfo.mes"
             placeholder="姓名/昵称/电话/邮箱"
-            v-model="queryInfo.queryBody"
             clearable
             @clear="getUserList"
           ></el-input>
         </el-col>
-        <el-col :span="3">
-          <el-select
-            v-model="selectValue"
-            placeholder="状态"
-            @blur="getUserList"
-          >
+        <el-col :span="5">
+          <el-select v-model="queryInfo.status" placeholder="状态">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -32,7 +28,19 @@
             ></el-option>
           </el-select>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="5">
+          <el-date-picker
+            v-model="timeValue"
+            type="datetimerange"
+            align="right"
+            start-placeholder="创建开始日期"
+            end-placeholder="创建结束日期"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
           <el-button type="primary" plain @click="getUserList">搜索</el-button>
           <el-button plain @click="exportData">导出</el-button>
           <el-button type="primary" @click="addDialogVisible = true"
@@ -44,10 +52,10 @@
       <el-table border :data="userList">
         <template v-for="(item, index) in tableHead">
           <el-table-column
+            v-if="item.column_name"
+            :key="index"
             :prop="item.column_name"
             :label="item.column_comment"
-            :key="index"
-            v-if="item.column_name"
           ></el-table-column>
         </template>
         <el-table-column label="状态" width="50px">
@@ -77,13 +85,13 @@
       </el-table>
       <!-- 分页-->
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
         :current-page="queryInfo.pagenum"
         :page-sizes="[10, 20, 50, 100]"
         :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
       ></el-pagination>
     </el-card>
     <!-- 添加用户对话框-->
@@ -95,9 +103,9 @@
     >
       <!-- 内容主体区域-->
       <el-form
+        ref="addFormRef"
         :model="createUser"
         :rules="addRulesForm"
-        ref="addFormRef"
         label-width="70px"
       >
         <el-form-item label="用户名" prop="name">
@@ -168,10 +176,8 @@
 </template>
 
 <script>
+// import { formTime } from '../../vendor/FormTime'
 export default {
-  created() {
-    this.getUserList()
-  },
   data() {
     // 验证邮箱的自定义规则
     var checkEmail = (rule, value, cb) => {
@@ -181,7 +187,7 @@ export default {
       }
       cb(new Error('请输入合法的邮箱！'))
     }
-    // 验证手机号的自定义规则
+    // 验证手机号的自定义规则˝
     var checkMobile = (rule, value, cb) => {
       const regMobile = /^1[3456789]\d{9}$/
       if (regMobile.test(value)) {
@@ -190,9 +196,13 @@ export default {
       cb(new Error('请输入正确的手机号！'))
     }
     return {
+      timeValue: '',
       // 获取用户列表的参数对象
       queryInfo: {
-        queryBody: '',
+        mes: '',
+        status: '',
+        startTime: '',
+        endTime: '',
         pageNum: 1,
         pageSize: 10
       },
@@ -243,21 +253,29 @@ export default {
       options: [
         {
           value: '0',
-          label: '启用'
+          label: '禁用'
         },
         {
           value: '1',
-          label: '禁用'
+          label: '启用'
+        },
+        {
+          value: '',
+          label: '全部'
         }
-      ],
-      selectValue: ''
+      ]
     }
+  },
+  created() {
+    this.getUserList()
   },
   methods: {
     async getUserList() {
       // const { data: userRes } = await this.$http.get('/user/find', {
       //   params: this.queryInfo
       // })
+      this.queryInfo.startTime = this.timeValue[0]
+      this.queryInfo.endTime = this.timeValue[1]
       const { data: userRes } = await this.$api.user.findPage(this.queryInfo)
       if (userRes.code !== 200) {
         return this.$message.error('获取用户列表失败！')
@@ -391,8 +409,9 @@ export default {
         // 数据来源
         const list = this.userList
         const data = this.formatJson(filterVal, list)
+        const time = this.$moment(new Date()).format('YYYY-MM-DD')
         // fileName: 要导出的表格名称
-        exportJsonToExcel(tHeader, data, 'fileName' + new Date())
+        exportJsonToExcel(tHeader, data, 'UsersList' + time)
       })
     },
     formatJson(filterVal, jsonData) {

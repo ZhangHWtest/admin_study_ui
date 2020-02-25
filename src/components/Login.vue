@@ -7,10 +7,10 @@
       </div>
       <!-- 登录表单区域 -->
       <el-form
+        ref="loginFormRef"
         :model="loginForm"
         class="login_form"
         :rules="loginFormRules"
-        ref="loginFormRef"
       >
         <!-- 用户名 -->
         <el-form-item prop="name">

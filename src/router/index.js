@@ -7,7 +7,9 @@ import Users from '../components/user/User.vue'
 import Role from '../components/role/Role.vue'
 import Dept from '../components/dept/Dept.vue'
 import Limits from '../components/limits/Limits.vue'
-import Charts from '../components/charts/Charts.vue'
+import MonitorList from '../components/monitor/MonitorList.vue'
+import TodayList from '../components/courseinfo/TodayList.vue'
+import YesterdayList from '../components/courseinfo/YesterdayList.vue'
 
 Vue.use(VueRouter)
 
@@ -24,7 +26,9 @@ const routes = [
       { path: '/user/role', component: Role },
       { path: '/user/dept', component: Dept },
       { path: '/user/limits', component: Limits },
-      { path: '/charts/list', component: Charts }
+      { path: '/apimonitor/list', component: MonitorList },
+      { path: '/courseinfo/todaylist', component: TodayList },
+      { path: '/courseinfo/yesterdaylist', component: YesterdayList }
     ]
   }
 ]

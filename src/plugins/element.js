@@ -29,9 +29,11 @@ import {
   DropdownMenu,
   DropdownItem,
   Select,
-  Option
+  Option,
+  DatePicker
 } from 'element-ui'
 
+Vue.use(DatePicker)
 Vue.use(Option)
 Vue.use(Select)
 Vue.use(DropdownItem)

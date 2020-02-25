@@ -1,4 +1,4 @@
-(function() {
+;(function() {
   var global =
     typeof window === 'object' ? window : typeof self === 'object' ? self : this
 

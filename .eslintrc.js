@@ -1,38 +1,28 @@
 module.exports = {
-  root: true,
-  parserOptions: {
-    parser: 'babel-eslint'
-  },
+  root:true,
   env: {
-    browser: true,
-    es6: true
+    node:true
   },
   extends: [
-    'plugin:vue/essential',
-    'plugin:prettier/recommended',
-    'eslint:recommended'
+    "plugin:vue/recommended",
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "prettier/vue"
   ],
-  plugins: ['vue'],
-  rules: {
-    //函数定义时括号前面要不要有空格
-    'space-before-function-paren': 0,
-    "no-console": 0,
-    'prettier/prettier': [
-      'error',
-      {
-        // tab缩进大小,默认为2
-        tabWidth: 2,
-        // 使用tab缩进，默认false
-        useTabs: false,
-        // 使用分号, 默认true
-        semi: false,
-        // 使用单引号, 默认false(在jsx中配置无效, 默认都是双引号)
-        singleQuote: true
-      }
-    ]
-  },
-  // 取消eslint 对全局变量的校验  变量名require
-  "globals":{
-    "require": true
-  }
-}
+    rules: {
+      "no-console": process.env.NODE_ENV ==="production"?"error":"off",
+      "no-debugger": process.env.NODE_ENV ==="production"?"error":"off",
+      "no-unused-vars":"off",
+      // "no-extra-semi": "error",
+      // "semi": ["error", "never"],
+      "no-redeclare":"off",
+      "no-empty":"off",
+      "no-undef":"off",
+      "no-case-declarations":"off",
+      "vue/no-use-v-if-with-v-for":"off",
+      "vue/no-unused-components":"off",  
+    },
+    parserOptions: {
+      parser:"babel-eslint"
+    }
+  };

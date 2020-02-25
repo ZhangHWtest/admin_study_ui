@@ -36,24 +36,24 @@
         >
           <!-- 一级菜单 -->
           <el-submenu
-            :index="item.id + ''"
             v-for="item in menulist"
             :key="item.id"
+            :index="item.id + ''"
           >
             <template slot="title">
               <i :class="item.icon"></i>
-              <span>{{ item.name }}</span>
+              <span class="sider-bar-title">{{ item.name }}</span>
             </template>
             <!-- 二级菜单 -->
             <el-menu-item
-              :index="subItem.url"
               v-for="subItem in item.childMenu"
               :key="subItem.id"
+              :index="subItem.url"
               @click="saveNavState(subItem.url)"
             >
               <template slot="title">
                 <i :class="subItem.icon"></i>
-                <span>{{ subItem.name }}</span>
+                <span class="sider-bar-title">{{ subItem.name }}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -72,9 +72,9 @@
         >
           <!-- 内容主体区域-->
           <el-form
+            ref="updatePaswordFormRef"
             :model="updatePaswordUser"
             :rules="updatePaswordRulesForm"
-            ref="updatePaswordFormRef"
             label-width="90px"
           >
             <el-form-item label="原始密码" prop="password">
@@ -245,5 +245,8 @@ export default {
 .el-icon-arrow-down {
   color: #fff;
   font-size: 15px;
+}
+.sider-bar-title {
+  margin-left: 6px;
 }
 </style>
