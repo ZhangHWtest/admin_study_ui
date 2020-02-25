@@ -36,7 +36,6 @@
             start-placeholder="创建开始日期"
             end-placeholder="创建结束日期"
             value-format="yyyy-MM-dd HH:mm:ss"
-            :default-time="['00:00:00', '24:00:00']"
           ></el-date-picker>
         </el-col>
       </el-row>
@@ -259,6 +258,10 @@ export default {
         {
           value: '1',
           label: '启用'
+        },
+        {
+          value: '',
+          label: '全部'
         }
       ]
     }
