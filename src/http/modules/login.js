@@ -7,7 +7,7 @@ import axios from '../axios'
 // 登录
 export const login = data => {
   return axios({
-    url: '/user/login',
+    url: 'http://10.20.19.38:9090/user/login',
     method: 'post',
     data
   })
@@ -16,7 +16,7 @@ export const login = data => {
 // 登出
 export const logout = () => {
   return axios({
-    url: 'logout',
+    url: 'http://10.20.19.38:9090/user/logout',
     method: 'get'
   })
 }
