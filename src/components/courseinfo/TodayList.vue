@@ -32,6 +32,16 @@
           ></el-table-column>
         </template>
       </el-table>
+      <!-- 分页-->
+      <el-pagination
+        :current-page="toDayList.pagenum"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="toDayList.pagesize"
+        layout="sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -40,6 +50,13 @@
 export default {
   data() {
     return {
+      findToDayBody: {
+        mes: '',
+        status: '',
+        pageNum: 1,
+        pageSize: 10
+      },
+      total: 0,
       tableHead: [
         { column_name: 'course_name', column_comment: '课程名称' },
         { column_name: 'content_title', column_comment: '直播名称' },
@@ -58,7 +75,9 @@ export default {
   },
   methods: {
     async getToDayList() {
-      const { data: userRes } = await this.$api.course.findToDayList()
+      const { data: userRes } = await this.$api.course.findToDayList(
+        this.findToDayBody
+      )
       if (userRes.code !== 1) {
         return this.$message.error('获取用户列表失败！')
       }
@@ -67,8 +86,6 @@ export default {
     // 导出数据
     exportData() {
       require.ensure([], () => {
-        // 标红是没有驼峰命名
-        // const { export_json_to_excel } = require('@/vendor/Export2Excel')
         const { exportJsonToExcel } = require('../../vendor/Export2Excel')
         // 要输出的表头
         const tHeader = [

@@ -3,106 +3,158 @@
     <!-- 面包屑导航区域-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>数据图表</el-breadcrumb-item>
-      <el-breadcrumb-item>图表</el-breadcrumb-item>
+      <el-breadcrumb-item>AIP监控</el-breadcrumb-item>
+      <el-breadcrumb-item>监控列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图区域-->
     <el-card>
-      <div>
-        <h2>vue中插入highcharts示例</h2>
-        <highcharts :options="chartOptions" :callback="myCallback"></highcharts>
-      </div>
+      <el-row :gutter="30">
+        <el-col :span="5">
+          <el-input
+            v-model="findApiBody.apiName"
+            placeholder="请输入API名称"
+            class="input-with-select"
+            clearable
+            @clear="findApiList"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="findApiList"
+            ></el-button>
+          </el-input>
+        </el-col>
+        <el-col :span="10">
+          <el-button plain @click="exportData">添加单个API监控</el-button>
+          <el-button type="primary" @click="addDialogVisible = true"
+            >添加多个API监控</el-button
+          >
+        </el-col>
+      </el-row>
+      <!-- 用户列表区域-->
+      <el-table border :data="apiList">
+        <el-table-column type="index" width="50" label="序号"></el-table-column>
+        <template v-for="(item, index) in tableHead">
+          <el-table-column
+            v-if="item.column_name"
+            :key="index"
+            :prop="item.column_name"
+            :label="item.column_comment"
+          ></el-table-column>
+        </template>
+        <el-table-column label="操作" width="180px">
+          <template slot-scope="scope">
+            <!-- 修改按钮 -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="修改"
+              placement="top"
+            >
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="mini"
+                ricon="el-icon-edit"
+                circle
+                @click="showEditDialog(scope.row.id)"
+              ></el-button>
+            </el-tooltip>
+            <!-- 执行按钮 -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="执行"
+              placement="top"
+            >
+              <el-button
+                type="success"
+                icon="el-icon-caret-right"
+                size="mini"
+                circle
+              ></el-button>
+            </el-tooltip>
+
+            <!-- 查看日志按钮 -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="查看日志"
+              placement="top"
+            >
+              <el-button
+                type="warning"
+                icon="el-icon-chat-line-square"
+                size="mini"
+                circle
+              ></el-button>
+            </el-tooltip>
+            <!-- 删除按钮 -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="删除"
+              placement="top"
+            >
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                circle
+              ></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页-->
+      <el-pagination
+        :current-page="findApiBody.pagenum"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="findApiBody.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
-
 <script>
-import { Chart } from 'highcharts-vue'
 export default {
-  components: {
-    highcharts: Chart
-  },
   data() {
     return {
-      chartOptions: {
-        title: {
-          text: '2010 ~ 2016 年太阳能行业就业人员发展情况'
-        },
-        subtitle: {
-          text: '数据来源：thesolarfoundation.com'
-        },
-        yAxis: {
-          title: {
-            text: '就业人数'
-          }
-        },
-        legend: {
-          layout: 'vertical',
-          align: 'right',
-          verticalAlign: 'middle'
-        },
-        plotOptions: {
-          series: {
-            label: {
-              connectorAllowed: false
-            },
-            pointStart: 2010
-          }
-        },
-        series: [
-          {
-            name: '安装，实施人员',
-            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-          },
-          {
-            name: '工人',
-            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-          },
-          {
-            name: '销售',
-            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-          },
-          {
-            name: '项目开发',
-            data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-          },
-          {
-            name: '其他',
-            data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-          }
-        ],
-        responsive: {
-          rules: [
-            {
-              condition: {
-                maxWidth: 500
-              },
-              chartOptions: {
-                legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom'
-                }
-              }
-            }
-          ]
+      findApiBody: {
+        apiName: '',
+        pagenum: '',
+        pagesize: ''
+      },
+      total: 0,
+      tableHead: [
+        { column_name: 'name', column_comment: '所属系统' },
+        { column_name: 'nickName', column_comment: '类型' },
+        { column_name: 'mobile', column_comment: '名称' },
+        { column_name: 'status', column_comment: '状态' },
+        { column_name: 'createTime', column_comment: '监控频率' },
+        { column_name: 'updateTime', column_comment: '可用率' },
+        { column_name: 'lastUpdateBy', column_comment: '平均响应时间' }
+      ],
+      apiList: [
+        {
+          name: 'name',
+          nickName: 'nickName',
+          mobile: 'mobile',
+          status: 'status',
+          createTime: 'createTime',
+          updateTime: 'updateTime',
+          lastUpdateBy: 'lastUpdateBy'
         }
-      }
+      ]
     }
   },
   methods: {
-    myCallback() {
-      console.log('this is callback function')
-    }
+    findApiList() {}
   }
 }
 </script>
 
-<style scoped>
-.highcharts-container {
-  width: 600px;
-  height: 400px;
-  border: 1px solid #ddd;
-  margin: auto;
-}
-</style>
+<style lang="less" scoped></style>
