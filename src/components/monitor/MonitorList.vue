@@ -28,7 +28,7 @@
           <el-button plain @click="addDialogVisible = true"
             >添加单个API监控</el-button
           >
-          <el-button type="primary" @click="addDialogVisible = true"
+          <el-button type="primary" @click="addManyDialogVisible = true"
             >添加多个API监控</el-button
           >
         </el-col>
@@ -119,14 +119,14 @@
         @current-change="handleCurrentChange"
       ></el-pagination>
     </el-card>
-    <!-- 添加用户对话框-->
+    <!-- 添加单个API区域--->
     <el-dialog
       title="添加单个API"
       :visible.sync="addDialogVisible"
       width="50%"
       @close="addDialogClosed"
     >
-      <!-- 添加区域-->
+      <!-- 添加form区域-->
       <el-form
         ref="addApiFormRef"
         :model="createApi"
@@ -193,6 +193,109 @@
         <el-button type="primary" @click="addApi">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 添加多个API区域--->
+    <el-dialog
+      title="添加多个API"
+      :visible.sync="addManyDialogVisible"
+      width="50%"
+      @close="addManyDialogClosed"
+    >
+      <!-- 添加form区域-->
+      <el-form
+        ref="addApiFormRef"
+        :model="createApi"
+        :rules="addRulesApiForm"
+        label-width="100px"
+      >
+        <el-form-item label="所属系统" prop="systemName">
+          <el-input v-model="createApi.systemName"></el-input>
+        </el-form-item>
+        <el-form-item label="监控名称" prop="apiName">
+          <el-input v-model="createApi.apiName"></el-input>
+        </el-form-item>
+        <el-form-item label="监控频率" prop="apiFrequency">
+          <template>
+            <el-radio v-model="radioApiTime" label="1">30秒</el-radio>
+            <el-radio v-model="radioApiTime" label="2">1分钟</el-radio>
+            <el-radio v-model="radioApiTime" label="3">5分钟</el-radio>
+            <el-radio v-model="radioApiTime" label="4">10分钟</el-radio>
+            <el-radio v-model="radioApiTime" label="5">30分钟</el-radio>
+            <el-radio v-model="radioApiTime" label="5">1小时</el-radio>
+          </template>
+        </el-form-item>
+        <el-form-item label="API管理">
+          <el-button type="primary" plain @click="getUserList"
+            >导入postman脚本</el-button
+          >
+          <el-button plain @click="addDialogVisible = true"
+            >添加单个API监控</el-button
+          >
+          <!-- 列表区域-->
+          <el-table border :data="postmanApiList">
+            <el-table-column
+              type="index"
+              width="50"
+              label="序号"
+            ></el-table-column>
+            <template v-for="(item, index) in postmanTableHead">
+              <el-table-column
+                v-if="item.column_name"
+                :key="index"
+                :prop="item.column_name"
+                :label="item.column_comment"
+              ></el-table-column>
+            </template>
+            <el-table-column label="操作" width="120px">
+              <template slot-scope="scope">
+                <!-- 修改按钮 -->
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="修改"
+                  placement="top"
+                >
+                  <el-button
+                    type="primary"
+                    icon="el-icon-edit"
+                    size="mini"
+                    ricon="el-icon-edit"
+                    circle
+                    @click="showEditDialog(scope.row.id)"
+                  ></el-button>
+                </el-tooltip>
+                <!-- 删除按钮 -->
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="删除"
+                  placement="top"
+                >
+                  <el-button
+                    type="danger"
+                    icon="el-icon-delete"
+                    size="mini"
+                    circle
+                  ></el-button>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input
+            v-model="createApi.apiRemarks"
+            type="textarea"
+            :rows="2"
+            placeholder="请输入备注信息。"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addManyDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addApi">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -214,6 +317,11 @@ export default {
         { column_name: 'updateTime', column_comment: '可用率' },
         { column_name: 'lastUpdateBy', column_comment: '平均响应时间' }
       ],
+      postmanTableHead: [
+        { column_name: 'mobile', column_comment: 'API类型' },
+        { column_name: 'name', column_comment: 'API地址' },
+        { column_name: 'nickName', column_comment: '概况' }
+      ],
       apiList: [
         {
           name: 'name',
@@ -223,6 +331,13 @@ export default {
           createTime: 'createTime',
           updateTime: 'updateTime',
           lastUpdateBy: 'lastUpdateBy'
+        }
+      ],
+      postmanApiList: [
+        {
+          name: 'name',
+          nickName: 'nickName',
+          mobile: 'mobile'
         }
       ],
       // 添加API表单的校验对象
@@ -238,7 +353,9 @@ export default {
       },
       radioApiType: '1',
       radioApiTime: '1',
+      // 监听添加弹窗事件
       addDialogVisible: false,
+      addManyDialogVisible: false,
       createApi: {
         name: [],
         password: [],
@@ -252,6 +369,9 @@ export default {
   methods: {
     findApiList() {},
     addDialogClosed() {
+      this.$refs.addApiFormRef.resetFields()
+    },
+    addManyDialogClosed() {
       this.$refs.addApiFormRef.resetFields()
     },
     addApi() {}
