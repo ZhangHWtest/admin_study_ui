@@ -7,6 +7,7 @@ import Users from '../components/user/User.vue'
 import Role from '../components/role/Role.vue'
 import Dept from '../components/dept/Dept.vue'
 import Limits from '../components/limits/Limits.vue'
+import MonitorChart from '../components/monitor/MonitorChart.vue'
 import MonitorList from '../components/monitor/MonitorList.vue'
 import TodayList from '../components/courseinfo/TodayList.vue'
 import YesterdayList from '../components/courseinfo/YesterdayList.vue'
@@ -26,9 +27,10 @@ const routes = [
       { path: '/user/role', component: Role },
       { path: '/user/dept', component: Dept },
       { path: '/user/limits', component: Limits },
-      { path: '/apimonitor/list', component: MonitorList },
       { path: '/courseinfo/todaylist', component: TodayList },
-      { path: '/courseinfo/yesterdaylist', component: YesterdayList }
+      { path: '/courseinfo/yesterdaylist', component: YesterdayList },
+      { path: '/monitor/chart', component: MonitorChart },
+      { path: '/monitor/list', component: MonitorList }
     ]
   }
 ]

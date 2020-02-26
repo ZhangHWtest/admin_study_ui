@@ -32,6 +32,16 @@
           ></el-table-column>
         </template>
       </el-table>
+      <!-- 分页-->
+      <el-pagination
+        :current-page="yesterDayList.page_num"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="yesterDayList.page_size"
+        layout="sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -40,6 +50,13 @@
 export default {
   data() {
     return {
+      findYesterDayBody: {
+        mes: '',
+        status: '',
+        pageNum: 1,
+        pageSize: 10
+      },
+      total: 0,
       tableHead: [
         { column_name: 'course_name', column_comment: '课程名称' },
         { column_name: 'content_title', column_comment: '直播名称' },
@@ -58,12 +75,13 @@ export default {
   },
   methods: {
     async getYesterDayList() {
-      const { data: userRes } = await this.$api.course.findYesterDayList()
+      const { data: userRes } = await this.$api.course.findYesterDayList(
+        this.findYesterDayBody
+      )
       if (userRes.code !== 1) {
         return this.$message.error('获取用户列表失败！')
       }
       this.yesterDayList = userRes.data
-      this.total = userRes.data.total
     },
     // 导出数据
     exportData() {
