@@ -24,3 +24,6 @@ body,
     padding-right: 5px;
     padding-top: 5px;
 }
+.el-card__body {
+    padding: 12px;
+  }

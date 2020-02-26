@@ -7,9 +7,23 @@
       <el-breadcrumb-item>监控图表</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图区域-->
+    <el-card clas="handCard">
+      <el-row :gutter="30">
+        <el-col :span="5">
+          <el-select v-model="value" placeholder="请选择API">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+    </el-card>
     <el-card>
       <div>
-        <h2>vue中插入highcharts示例</h2>
         <highcharts :options="chartOptions" :callback="myCallback"></highcharts>
       </div>
     </el-card>
@@ -24,16 +38,39 @@ export default {
   },
   data() {
     return {
+      options: [
+        {
+          value: '选项1',
+          label: '黄金糕'
+        },
+        {
+          value: '选项2',
+          label: '双皮奶'
+        },
+        {
+          value: '选项3',
+          label: '蚵仔煎'
+        },
+        {
+          value: '选项4',
+          label: '龙须面'
+        },
+        {
+          value: '选项5',
+          label: '北京烤鸭'
+        }
+      ],
+      value: '',
       chartOptions: {
         title: {
-          text: '2010 ~ 2016 年太阳能行业就业人员发展情况'
+          text: 'API监控结果'
         },
         subtitle: {
-          text: '数据来源：thesolarfoundation.com'
+          text: 'api名称暂时无'
         },
         yAxis: {
           title: {
-            text: '就业人数'
+            text: '响应时间'
           }
         },
         legend: {
@@ -98,7 +135,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .highcharts-container {
   width: 600px;
   height: 400px;

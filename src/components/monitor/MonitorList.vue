@@ -121,9 +121,9 @@
     </el-card>
     <!-- 添加用户对话框-->
     <el-dialog
-      title="添加API"
+      title="添加单个API"
       :visible.sync="addDialogVisible"
-      width="60%"
+      width="50%"
       @close="addDialogClosed"
     >
       <!-- 添加区域-->
