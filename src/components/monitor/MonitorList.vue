@@ -25,13 +25,15 @@
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button plain @click="exportData">添加单个API监控</el-button>
+          <el-button plain @click="addDialogVisible = true"
+            >添加单个API监控</el-button
+          >
           <el-button type="primary" @click="addDialogVisible = true"
             >添加多个API监控</el-button
           >
         </el-col>
       </el-row>
-      <!-- 用户列表区域-->
+      <!-- api列表区域-->
       <el-table border :data="apiList">
         <el-table-column type="index" width="50" label="序号"></el-table-column>
         <template v-for="(item, index) in tableHead">
@@ -117,6 +119,80 @@
         @current-change="handleCurrentChange"
       ></el-pagination>
     </el-card>
+    <!-- 添加用户对话框-->
+    <el-dialog
+      title="添加API"
+      :visible.sync="addDialogVisible"
+      width="60%"
+      @close="addDialogClosed"
+    >
+      <!-- 添加区域-->
+      <el-form
+        ref="addApiFormRef"
+        :model="createApi"
+        :rules="addRulesApiForm"
+        label-width="100px"
+      >
+        <el-form-item label="所属系统" prop="systemName">
+          <el-input v-model="createApi.systemName"></el-input>
+        </el-form-item>
+        <el-form-item label="监控名称" prop="apiName">
+          <el-input v-model="createApi.apiName"></el-input>
+        </el-form-item>
+        <el-form-item label="API类型" prop="apiType">
+          <template>
+            <el-radio v-model="radioApiType" label="1">GET</el-radio>
+            <el-radio v-model="radioApiType" label="2">POST</el-radio>
+            <el-radio v-model="radioApiType" label="3">HEAD</el-radio>
+            <el-radio v-model="radioApiType" label="4">PUT</el-radio>
+            <el-radio v-model="radioApiType" label="5">DELETE</el-radio>
+          </template>
+        </el-form-item>
+        <el-form-item label="API地址" prop="apiAdress">
+          <el-input v-model="createApi.apiAdress"></el-input>
+        </el-form-item>
+        <el-form-item label="监控频率" prop="apiFrequency">
+          <template>
+            <el-radio v-model="radioApiTime" label="1">30秒</el-radio>
+            <el-radio v-model="radioApiTime" label="2">1分钟</el-radio>
+            <el-radio v-model="radioApiTime" label="3">5分钟</el-radio>
+            <el-radio v-model="radioApiTime" label="4">10分钟</el-radio>
+            <el-radio v-model="radioApiTime" label="5">30分钟</el-radio>
+            <el-radio v-model="radioApiTime" label="5">1小时</el-radio>
+          </template>
+        </el-form-item>
+        <el-form-item label="请求头部">
+          <el-input
+            v-model="createApi.apiHead"
+            placeholder="{key: value}"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="请求参数">
+          <el-input
+            v-model="createApi.apiBody"
+            placeholder="{key: value}"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="验证结果">
+          <el-input
+            v-model="createApi.apiResult"
+            placeholder="{key: value}"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input
+            v-model="createApi.apiRemarks"
+            type="textarea"
+            :rows="2"
+            placeholder="请输入备注信息。"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addApi">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -148,11 +224,37 @@ export default {
           updateTime: 'updateTime',
           lastUpdateBy: 'lastUpdateBy'
         }
-      ]
+      ],
+      // 添加API表单的校验对象
+      addRulesApiForm: {
+        systemName: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        apiName: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        apiAdress: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
+        apiFrequency: [
+          { required: true, message: '请输入昵称', trigger: 'blur' }
+        ]
+      },
+      radioApiType: '1',
+      radioApiTime: '1',
+      addDialogVisible: false,
+      createApi: {
+        name: [],
+        password: [],
+        nickName: [],
+        mobile: [],
+        email: [],
+        status: '0'
+      }
     }
   },
   methods: {
-    findApiList() {}
+    findApiList() {},
+    addDialogClosed() {
+      this.$refs.addApiFormRef.resetFields()
+    },
+    addApi() {}
   }
 }
 </script>
