@@ -30,9 +30,11 @@ import {
   DropdownItem,
   Select,
   Option,
-  DatePicker
+  DatePicker,
+  Cascader
 } from 'element-ui'
 
+Vue.use(Cascader)
 Vue.use(DatePicker)
 Vue.use(Option)
 Vue.use(Select)

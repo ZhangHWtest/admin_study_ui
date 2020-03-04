@@ -10,15 +10,11 @@
     <el-card clas="handCard">
       <el-row :gutter="30">
         <el-col :span="5">
-          <el-select v-model="value" placeholder="请选择API">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
+          <el-cascader
+            :options="options"
+            :props="{ multiple: true, checkStrictly: true }"
+            clearable
+          ></el-cascader>
         </el-col>
       </el-row>
     </el-card>
@@ -26,6 +22,32 @@
       <div>
         <highcharts :options="chartOptions" :callback="myCallback"></highcharts>
       </div>
+    </el-card>
+    <el-card>
+      <el-row>
+        <el-col :span="12"
+          >预留饼图1
+          <div class="grid-content bg-purple"></div
+        ></el-col>
+        <el-col :span="12"
+          >预留饼图2
+          <div class="grid-content bg-purple-light"></div
+        ></el-col>
+      </el-row>
+    </el-card>
+    <!-- api日志列表区域-->
+    <el-card>
+      <el-table border :data="apiList">
+        <el-table-column type="index" width="50" label="序号"></el-table-column>
+        <template v-for="(item, index) in tableHead">
+          <el-table-column
+            v-if="item.column_name"
+            :key="index"
+            :prop="item.column_name"
+            :label="item.column_comment"
+          ></el-table-column>
+        </template>
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -38,29 +60,165 @@ export default {
   },
   data() {
     return {
-      options: [
+      tableHead: [
+        { column_name: 'name', column_comment: '所属系统' },
+        { column_name: 'mobile', column_comment: '名称' },
+        { column_name: 'lastUpdateBy', column_comment: '监控时间' },
+        { column_name: 'status', column_comment: '状态' },
+        { column_name: 'lastUpdateBy', column_comment: '响应时间' },
+        { column_name: 'lastUpdateBy', column_comment: '日志' },
+        { column_name: 'lastUpdateBy', column_comment: 'API详情' }
+      ],
+      apiList: [
         {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎'
-        },
-        {
-          value: '选项4',
-          label: '龙须面'
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭'
+          name: 'name',
+          nickName: 'nickName',
+          mobile: 'mobile',
+          status: 'status',
+          createTime: 'createTime',
+          updateTime: 'updateTime',
+          lastUpdateBy: 'lastUpdateBy'
         }
       ],
-      value: '',
+      // 多级选择器，绑定数据
+      options: [
+        {
+          value: 'zhinan',
+          label: '指南',
+          children: [
+            {
+              value: 'shejiyuanze',
+              label: '设计原则',
+              children: [
+                {
+                  value: 'yizhi',
+                  label: '一致'
+                },
+                {
+                  value: 'fankui',
+                  label: '反馈'
+                }
+              ]
+            },
+            {
+              value: 'daohang',
+              label: '导航',
+              children: [
+                {
+                  value: 'cexiangdaohang',
+                  label: '侧向导航'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          value: 'zujian',
+          label: '组件',
+          children: [
+            {
+              value: 'basic',
+              label: 'Basic',
+              children: [
+                {
+                  value: 'layout',
+                  label: 'Layout 布局'
+                }
+              ]
+            },
+            {
+              value: 'form',
+              label: 'Form',
+              children: [
+                {
+                  value: 'rate',
+                  label: 'Rate 评分'
+                },
+                {
+                  value: 'form',
+                  label: 'Form 表单'
+                }
+              ]
+            },
+            {
+              value: 'data',
+              label: 'Data',
+              children: [
+                {
+                  value: 'pagination',
+                  label: 'Pagination 分页'
+                },
+                {
+                  value: 'badge',
+                  label: 'Badge 标记'
+                }
+              ]
+            },
+            {
+              value: 'notice',
+              label: 'Notice',
+              children: [
+                {
+                  value: 'message-box',
+                  label: 'MessageBox 弹框'
+                },
+                {
+                  value: 'notification',
+                  label: 'Notification 通知'
+                }
+              ]
+            },
+            {
+              value: 'navigation',
+              label: 'Navigation',
+              children: [
+                {
+                  value: 'dropdown',
+                  label: 'Dropdown 下拉菜单'
+                },
+                {
+                  value: 'steps',
+                  label: 'Steps 步骤条'
+                }
+              ]
+            },
+            {
+              value: 'others',
+              label: 'Others',
+              children: [
+                {
+                  value: 'carousel',
+                  label: 'Carousel 走马灯'
+                },
+                {
+                  value: 'collapse',
+                  label: 'Collapse 折叠面板'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          value: 'ziyuan',
+          label: '资源',
+          children: [
+            {
+              value: 'axure',
+              label: 'Axure Components'
+            },
+            {
+              value: 'sketch',
+              label: 'Sketch Templates'
+            },
+            {
+              value: 'jiaohu',
+              label: '组件交互文档'
+            }
+          ]
+        }
+      ],
+
+      // 曲线图 绑定数据
       chartOptions: {
         title: {
           text: 'API监控结果'
@@ -138,7 +296,7 @@ export default {
 <style lang="less" scoped>
 .highcharts-container {
   width: 600px;
-  height: 400px;
+  height: 350px;
   border: 1px solid #ddd;
   margin: auto;
 }

@@ -28,6 +28,16 @@ module.exports = {
           '^/api': ''
         }
       }
+      // '/user': {
+      //   // 接口服务地址
+      //   target: 'http://10.20.19.38:10080',
+      //   // 是否跨域
+      //   changeOrigin: true,
+      //   ws: true,
+      //   pathRewrite: {
+      //     '^/user': ''
+      //   }
+      //}
     }
   }
 }
