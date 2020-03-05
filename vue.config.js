@@ -15,29 +15,28 @@ module.exports = {
       warnings: false,
       errors: true
     },
-
     // 配置代理
     proxy: {
-      '/api': {
+      '/za': {
         // 接口服务地址
         target: 'http://10.20.4.158:5555',
         // 是否跨域
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          '^/api': ''
+          '^/za': ''
+        }
+      },
+      '/zt': {
+        // 接口服务地址
+        target: 'http://10.20.3.217:1111',
+        // 是否跨域
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/zt': ''
         }
       }
-      // '/user': {
-      //   // 接口服务地址
-      //   target: 'http://10.20.19.38:10080',
-      //   // 是否跨域
-      //   changeOrigin: true,
-      //   ws: true,
-      //   pathRewrite: {
-      //     '^/user': ''
-      //   }
-      //}
     }
   }
 }

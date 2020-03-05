@@ -147,9 +147,13 @@ export default {
     },
     // 获取所有的菜单
     async getMenuList() {
-      const { data: res } = await this.$api.menu.findNavTree(this.loginname)
-      if (res.code !== 200) return this.$message.error(res.msg)
-      this.menulist = res.data
+      const { data: res } = await this.$api.menu.findNavTree()
+      if (res.code === 200) {
+        return (this.menulist = res.data)
+      } else if (res.code === 20003) {
+        this.$message.error('登录失效，请重新登录！')
+        return this.$router.push('/login')
+      }
     },
     // 点击按钮切换菜单的折叠与展开
     toggleCollapse() {

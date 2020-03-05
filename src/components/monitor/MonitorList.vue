@@ -11,16 +11,16 @@
       <el-row :gutter="30">
         <el-col :span="5">
           <el-input
-            v-model="findApiBody.apiName"
+            v-model="findMonitorBody.apiName"
             placeholder="请输入API名称"
             class="input-with-select"
             clearable
-            @clear="findApiList"
+            @clear="getMonitorList"
           >
             <el-button
               slot="append"
               icon="el-icon-search"
-              @click="findApiList"
+              @click="getMonitorList"
             ></el-button>
           </el-input>
         </el-col>
@@ -34,8 +34,7 @@
         </el-col>
       </el-row>
       <!-- api列表区域-->
-      <el-table border :data="apiList">
-        <el-table-column type="index" width="50" label="序号"></el-table-column>
+      <el-table border :data="monitorList">
         <template v-for="(item, index) in tableHead">
           <el-table-column
             v-if="item.column_name"
@@ -110,9 +109,9 @@
       </el-table>
       <!-- 分页-->
       <el-pagination
-        :current-page="findApiBody.pagenum"
+        :current-page="findMonitorBody.pagenum"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="findApiBody.pagesize"
+        :page-size="findMonitorBody.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         @size-change="handleSizeChange"
@@ -302,36 +301,30 @@
 export default {
   data() {
     return {
-      findApiBody: {
-        apiName: '',
+      // 搜索绑定数据
+      findMonitorBody: {
+        monitorName: '',
         pagenum: '',
         pagesize: ''
       },
-      total: 0,
+      // 返回总条数
+      monitorTotal: 0,
+      // 列表展示数据
+      monitorList: '',
+      // table 头名称
       tableHead: [
-        { column_name: 'name', column_comment: '所属系统' },
-        { column_name: 'nickName', column_comment: '类型' },
-        { column_name: 'mobile', column_comment: '名称' },
-        { column_name: 'status', column_comment: '状态' },
+        { column_name: 'id', column_comment: 'ID' },
+        { column_name: 'groupName', column_comment: '所属系统' },
+        { column_name: 'httpName', column_comment: '名称' },
+        { column_name: 'type', column_comment: '类型' },
         { column_name: 'createTime', column_comment: '监控频率' },
-        { column_name: 'updateTime', column_comment: '可用率' },
-        { column_name: 'lastUpdateBy', column_comment: '平均响应时间' }
+        { column_name: 'archived', column_comment: '可用率' }
       ],
+      // 批量添加弹框里的table
       postmanTableHead: [
         { column_name: 'mobile', column_comment: 'API类型' },
         { column_name: 'name', column_comment: 'API地址' },
         { column_name: 'nickName', column_comment: '概况' }
-      ],
-      apiList: [
-        {
-          name: 'name',
-          nickName: 'nickName',
-          mobile: 'mobile',
-          status: 'status',
-          createTime: 'createTime',
-          updateTime: 'updateTime',
-          lastUpdateBy: 'lastUpdateBy'
-        }
       ],
       postmanApiList: [
         {
@@ -340,8 +333,9 @@ export default {
           mobile: 'mobile'
         }
       ],
+      addMonitor: [],
       // 添加API表单的校验对象
-      addRulesApiForm: {
+      addRulesMonitorForm: {
         systemName: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
@@ -357,6 +351,7 @@ export default {
       addDialogVisible: false,
       addManyDialogVisible: false,
       createApi: {
+        apiName: '',
         name: [],
         password: [],
         nickName: [],
@@ -366,8 +361,18 @@ export default {
       }
     }
   },
+  created() {
+    this.getMonitorList()
+  },
   methods: {
-    findApiList() {},
+    async getMonitorList() {
+      const { data: monitorRes } = await this.$api.monitor.monitorList()
+      if (monitorRes.code !== 200) {
+        return this.$message.error('获取用户列表失败！')
+      }
+      this.monitorList = monitorRes.data
+      this.monitortotal = monitorRes.data.total
+    },
     addDialogClosed() {
       this.$refs.addApiFormRef.resetFields()
     },

@@ -271,9 +271,6 @@ export default {
   },
   methods: {
     async getUserList() {
-      // const { data: userRes } = await this.$http.get('/user/find', {
-      //   params: this.queryInfo
-      // })
       this.queryInfo.startTime = this.timeValue[0]
       this.queryInfo.endTime = this.timeValue[1]
       const { data: userRes } = await this.$api.user.findPage(this.queryInfo)
