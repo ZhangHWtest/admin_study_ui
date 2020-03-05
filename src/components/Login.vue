@@ -3,8 +3,13 @@
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/logo.png" alt />
+        <img src="../assets/github.png" alt />
       </div>
+      <!-- <el-header>
+        <div>
+          <span>测试部API监控后台 </span>
+        </div>
+      </el-header> -->
       <!-- 登录表单区域 -->
       <el-form
         ref="loginFormRef"

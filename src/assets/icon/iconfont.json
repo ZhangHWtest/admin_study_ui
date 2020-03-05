@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7766795",
+      "name": "icon_setting",
+      "font_class": "icon_setting",
+      "unicode": "eb9d",
+      "unicode_decimal": 60317
+    },
+    {
+      "icon_id": "7766747",
+      "name": "icon_group",
+      "font_class": "icon_group",
+      "unicode": "eb95",
+      "unicode_decimal": 60309
+    },
+    {
+      "icon_id": "7766775",
+      "name": "icon_patriarch",
+      "font_class": "icon_patriarch",
+      "unicode": "eb9a",
+      "unicode_decimal": 60314
+    },
+    {
+      "icon_id": "7766796",
+      "name": "icon_signal",
+      "font_class": "icon_signal",
+      "unicode": "eb9e",
+      "unicode_decimal": 60318
+    },
+    {
+      "icon_id": "7766818",
+      "name": "icon_meeting",
+      "font_class": "icon_meeting",
+      "unicode": "eba2",
+      "unicode_decimal": 60322
+    },
+    {
+      "icon_id": "7766714",
+      "name": "icon_boss",
+      "font_class": "icon_boss",
+      "unicode": "eb90",
+      "unicode_decimal": 60304
+    },
+    {
+      "icon_id": "7766787",
+      "name": "icon_principal",
+      "font_class": "icon_principal",
+      "unicode": "eb9c",
+      "unicode_decimal": 60316
+    },
+    {
+      "icon_id": "7772178",
+      "name": "icon_boss_fill",
+      "font_class": "icon_boss_fill",
+      "unicode": "eba5",
+      "unicode_decimal": 60325
+    },
+    {
       "icon_id": "432098",
       "name": "video",
       "font_class": "video",
@@ -67,41 +123,6 @@
       "font_class": "tradingdata",
       "unicode": "e7b5",
       "unicode_decimal": 59317
-    },
-    {
-      "icon_id": "7549350",
-      "name": "用户",
-      "font_class": "RectangleCopy1",
-      "unicode": "e6a3",
-      "unicode_decimal": 59043
-    },
-    {
-      "icon_id": "7549362",
-      "name": "设置/管理",
-      "font_class": "RectangleCopy2",
-      "unicode": "e6a2",
-      "unicode_decimal": 59042
-    },
-    {
-      "icon_id": "7551132",
-      "name": "人群",
-      "font_class": "RectangleCopy3",
-      "unicode": "e6b1",
-      "unicode_decimal": 59057
-    },
-    {
-      "icon_id": "7551133",
-      "name": "人群管理",
-      "font_class": "RectangleCopy4",
-      "unicode": "e6b2",
-      "unicode_decimal": 59058
-    },
-    {
-      "icon_id": "7551131",
-      "name": "用户管理",
-      "font_class": "RectangleCopy",
-      "unicode": "e6b0",
-      "unicode_decimal": 59056
     }
   ]
 }

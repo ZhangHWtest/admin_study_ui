@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="../assets/github.jpeg" alt />
+        <img src="../assets/logo.png" alt />
         <span>您好！欢迎进入Admin后台</span>
       </div>
       <el-dropdown>
