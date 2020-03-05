@@ -35,6 +35,12 @@
       </el-row>
       <!-- api列表区域-->
       <el-table border :data="monitorList">
+        <el-table-column
+          type="index"
+          width="50px"
+          label="序号"
+        ></el-table-column>
+        <el-table-column label="ID" prop="id" width="50px"></el-table-column>
         <template v-for="(item, index) in tableHead">
           <el-table-column
             v-if="item.column_name"
@@ -43,6 +49,36 @@
             :label="item.column_comment"
           ></el-table-column>
         </template>
+        <el-table-column label="类型" width="80px">
+          <template slot-scope="scope">
+            <p v-if="scope.row.type === 0">单个API</p>
+            <p v-else-if="scope.row.type === 1">群组API</p>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="80px">
+          <template slot-scope="scope">
+            <!-- <p v-if="scope.row.status === 0" class="apiNoActive">
+              未监控
+            </p>
+            <p
+              v-else-if="scope.row.status === 1"
+              class="apiActive"
+              color="#67C23A"
+            >
+              监控中
+            </p> -->
+            <font
+              v-if="scope.row.status === 0"
+              color="#F56C6C"
+              class="apiNoActive"
+            >
+              未监控
+            </font>
+            <font v-else color="#67C23A" class="apiActive">
+              监控中
+            </font>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="180px">
           <template slot-scope="scope">
             <!-- 修改按钮 -->
@@ -61,21 +97,37 @@
                 @click="showEditDialog(scope.row.id)"
               ></el-button>
             </el-tooltip>
-            <!-- 执行按钮 -->
+            <!-- 根据状态判断，是执行/暂停按钮 -->
             <el-tooltip
+              v-if="scope.row.status === 0"
               class="item"
               effect="dark"
               content="执行"
               placement="top"
             >
               <el-button
+                v-if="scope.row.status === 0"
                 type="success"
                 icon="el-icon-caret-right"
                 size="mini"
                 circle
               ></el-button>
             </el-tooltip>
-
+            <el-tooltip
+              v-if="scope.row.type === 1"
+              class="item"
+              effect="dark"
+              content="暂停"
+              placement="top"
+            >
+              <el-button
+                v-if="scope.row.type === 1"
+                type="danger"
+                icon="el-icon-switch-button"
+                size="mini"
+                circle
+              ></el-button>
+            </el-tooltip>
             <!-- 查看日志按钮 -->
             <el-tooltip
               class="item"
@@ -313,10 +365,8 @@ export default {
       monitorList: '',
       // table 头名称
       tableHead: [
-        { column_name: 'id', column_comment: 'ID' },
         { column_name: 'groupName', column_comment: '所属系统' },
         { column_name: 'httpName', column_comment: '名称' },
-        { column_name: 'type', column_comment: '类型' },
         { column_name: 'createTime', column_comment: '监控频率' },
         { column_name: 'archived', column_comment: '可用率' }
       ],
@@ -384,4 +434,27 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.apiNoActive::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: #f56c6c;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 30px;
+}
+.apiActive::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: #67c23a;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 30px;
+}
+</style>
