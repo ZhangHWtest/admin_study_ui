@@ -5,12 +5,13 @@ import Home from '../components/Home.vue'
 import Index from '../components/Index.vue'
 import Users from '../components/user/User.vue'
 import Role from '../components/role/Role.vue'
-import Dept from '../components/dept/Dept.vue'
+import Demo from '../components/demo/demo.vue'
 import Limits from '../components/limits/Limits.vue'
 import MonitorChart from '../components/monitor/MonitorChart.vue'
 import MonitorList from '../components/monitor/MonitorList.vue'
 import TodayList from '../components/courseinfo/TodayList.vue'
 import YesterdayList from '../components/courseinfo/YesterdayList.vue'
+import StudentList from '../components/student/StudentList.vue'
 
 Vue.use(VueRouter)
 
@@ -25,12 +26,13 @@ const routes = [
       { path: '/index', component: Index },
       { path: '/user/list', component: Users },
       { path: '/user/role', component: Role },
-      { path: '/user/dept', component: Dept },
+      { path: '/user/dept', component: Demo },
       { path: '/user/limits', component: Limits },
       { path: '/courseinfo/todaylist', component: TodayList },
       { path: '/courseinfo/yesterdaylist', component: YesterdayList },
       { path: '/monitor/chart', component: MonitorChart },
-      { path: '/monitor/list', component: MonitorList }
+      { path: '/monitor/list', component: MonitorList },
+      { path: '/student/list', component: StudentList }
     ]
   }
 ]

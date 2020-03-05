@@ -1,7 +1,7 @@
-import axios from '../axios'
+import { reques } from '../axios'
 
 export const getjson = url => {
-  return axios({
+  return reques({
     url
   })
 }

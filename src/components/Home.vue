@@ -138,7 +138,7 @@ export default {
   created() {
     this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
-    this.loginname.name = window.sessionStorage.getItem('token')
+    this.loginname.name = window.sessionStorage.getItem('loginName')
   },
   methods: {
     logout() {
@@ -147,12 +147,13 @@ export default {
     },
     // 获取所有的菜单
     async getMenuList() {
-      // const { data: res } = await this.$http.get('/menu/getmenu', {
-      //   params: this.loginname
-      // })
-      const { data: res } = await this.$api.menu.findNavTree(this.loginname)
-      if (res.code !== 200) return this.$message.error(res.msg)
-      this.menulist = res.data
+      const { data: res } = await this.$api.menu.findNavTree()
+      if (res.code === 200) {
+        return (this.menulist = res.data)
+      } else if (res.code === 20003) {
+        this.$message.error('登录失效，请重新登录！')
+        return this.$router.push('/login')
+      }
     },
     // 点击按钮切换菜单的折叠与展开
     toggleCollapse() {
@@ -169,17 +170,13 @@ export default {
     updatePaswordMethod() {
       this.$refs.updatePaswordFormRef.validate(async valid => {
         if (!valid) return
-        this.updatePaswordUser.name = window.sessionStorage.getItem('token')
+        this.updatePaswordUser.name = window.sessionStorage.getItem('loginName')
         if (
           this.updatePaswordUser.newPassword !==
           this.updatePaswordUser.checkPassword
         )
           return this.$message.error('请检查输入！')
         // 校验通过可以发起添加请求了
-        // const { data: res } = await this.$http.post(
-        //   '/user/updatepassword',
-        //   this.updatePaswordUser
-        // )
         const { data: res } = await this.$api.user.updatepassword(
           this.updatePaswordUser
         )

@@ -27,3 +27,6 @@ body,
 .el-card__body {
     padding: 12px;
   }
+.el-radio {
+    margin-right: 10px;
+}

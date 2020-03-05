@@ -1,4 +1,4 @@
-import axios from '../axios'
+import { reques } from '../axios'
 
 /*
  * 用户管理模块
@@ -6,8 +6,8 @@ import axios from '../axios'
 
 // 修改密码
 export const updatepassword = data => {
-  return axios({
-    url: 'http://10.20.19.38:9090/user/updatepassword',
+  return reques({
+    url: 'http://10.20.19.38:10080/user/updatepassword',
     method: 'post',
     data
   })
@@ -15,8 +15,8 @@ export const updatepassword = data => {
 
 // 分页查询
 export const findPage = data => {
-  return axios({
-    url: 'http://10.20.19.38:9090/user/find',
+  return reques({
+    url: 'http://10.20.19.38:10080/user/find',
     method: 'post',
     data
   })
@@ -24,8 +24,8 @@ export const findPage = data => {
 
 // 新增用户
 export const create = data => {
-  return axios({
-    url: 'http://10.20.19.38:9090/user/create',
+  return reques({
+    url: 'http://10.20.19.38:10080/user/create',
     method: 'post',
     data
   })
@@ -33,16 +33,16 @@ export const create = data => {
 
 // 根据id查询，展示编辑用户的对话框
 export const getuserbyid = id => {
-  return axios({
-    url: 'http://10.20.19.38:9090/user/getuserbyid/' + id,
+  return reques({
+    url: 'http://10.20.19.38:10080/user/getuserbyid/' + id,
     method: 'get'
   })
 }
 
 // 修改用户
 export const update = data => {
-  return axios({
-    url: 'http://10.20.19.38:9090/user/update',
+  return reques({
+    url: 'http://10.20.19.38:10080/user/update',
     method: 'post',
     data
   })
@@ -50,8 +50,8 @@ export const update = data => {
 
 // 删除用户
 export const deleteuser = id => {
-  return axios({
-    url: 'http://10.20.19.38:9090/user/deleteuser/' + id,
+  return reques({
+    url: 'http://10.20.19.38:10080/user/deleteuser/' + id,
     method: 'delete'
   })
 }

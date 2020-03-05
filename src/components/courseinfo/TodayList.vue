@@ -51,8 +51,6 @@ export default {
   data() {
     return {
       findToDayBody: {
-        mes: '',
-        status: '',
         pageNum: 1,
         pageSize: 10
       },
