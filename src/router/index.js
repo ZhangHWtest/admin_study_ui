@@ -9,6 +9,7 @@ import Demo from '../components/demo/demo.vue'
 import Limits from '../components/limits/Limits.vue'
 import MonitorChart from '../components/monitor/MonitorChart.vue'
 import MonitorList from '../components/monitor/MonitorList.vue'
+import LogList from '../components/monitor/LogList.vue'
 import TodayList from '../components/courseinfo/TodayList.vue'
 import YesterdayList from '../components/courseinfo/YesterdayList.vue'
 import StudentList from '../components/student/StudentList.vue'
@@ -32,6 +33,7 @@ const routes = [
       { path: '/courseinfo/yesterdaylist', component: YesterdayList },
       { path: '/monitor/chart', component: MonitorChart },
       { path: '/monitor/list', component: MonitorList },
+      { path: '/monitor/logList', component: LogList },
       { path: '/student/list', component: StudentList }
     ]
   }
