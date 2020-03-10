@@ -31,9 +31,10 @@ import {
   Select,
   Option,
   DatePicker,
-  Cascader
+  Cascader,
+  Autocomplete
 } from 'element-ui'
-
+Vue.use(Autocomplete)
 Vue.use(Cascader)
 Vue.use(DatePicker)
 Vue.use(Option)

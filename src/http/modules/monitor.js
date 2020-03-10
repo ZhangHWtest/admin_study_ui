@@ -22,10 +22,19 @@ export const saveSingle = data => {
   })
 }
 
-// 
+// 获取所有群组
 export const getMonitorGroupsApi = () => {
   return reques({
     url: 'http://10.20.19.38:10081/monitor/getgroups',
     method: 'get'
+  })
+}
+
+// 修改监控状态
+export const enableMonitorApi = params => {
+  return reques({
+    url: 'http://10.20.19.38:10081/monitor/enabled',
+    method: 'get',
+    params
   })
 }

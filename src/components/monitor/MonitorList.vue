@@ -94,7 +94,7 @@
                 size="mini"
                 ricon="el-icon-edit"
                 circle
-                @click="showEditDialog(scope.row.id)"
+                @click="showEditDialog(scope.row.guid)"
               ></el-button>
             </el-tooltip>
             <!-- 根据状态判断，是执行/暂停按钮 -->
@@ -111,6 +111,7 @@
                 icon="el-icon-caret-right"
                 size="mini"
                 circle
+                @click="enableMonitor(scope)"
               ></el-button>
             </el-tooltip>
             <el-tooltip
@@ -126,6 +127,7 @@
                 icon="el-icon-switch-button"
                 size="mini"
                 circle
+                @click="enableMonitor(scope)"
               ></el-button>
             </el-tooltip>
             <!-- 查看日志按钮 -->
@@ -186,6 +188,14 @@
         label-width="100px"
       >
         <el-form-item label="所属系统" prop="group">
+          <!-- 下拉框跟输入一体的input -->
+          <!-- <el-autocomplete
+            v-model="createApi.group"
+            class="inline-input"
+            :fetch-suggestions="getMonitorGroups()"
+            placeholder="请输入或选择系统"
+            @select="getMonitorGroups()"
+          ></el-autocomplete> -->
           <template>
             <el-select v-model="createApi.group" placeholder="请选择">
               <el-option
@@ -196,7 +206,6 @@
               >
               </el-option>
             </el-select>
-            <!-- 修改按钮 -->
             <el-tooltip
               class="item"
               effect="dark"
@@ -362,7 +371,11 @@ export default {
         remark: '',
         type: ''
       },
-      groupsList: []
+      groupsList: [],
+      enableMonitorBody: {
+        guid: '',
+        enabled: ''
+      }
     }
   },
   created() {
@@ -404,6 +417,14 @@ export default {
     async addMonitorGroups() {
       const { data: getMGRes } = await this.$api.monitor.getMonitorGroupsApi()
       this.groupsList = getMGRes.data
+    },
+    async enableMonitor(scope) {
+      console.log(scope)
+      this.enableMonitorBody.enabled = scope.row.enabled
+      this.enableMonitorBody.guid = scope.row.guid
+      const { data: getMGRes } = await this.$api.monitor.enableMonitorApi(
+        this.enableMonitorBody
+      )
     }
   }
 }
