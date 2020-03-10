@@ -25,7 +25,9 @@
           </el-input>
         </el-col>
         <el-col :span="10">
-          <el-button plain @click="addDialogVisible = true"
+          <el-button
+            plain
+            @click=";(addDialogVisible = true), getMonitorGroups()"
             >添加单个API监控</el-button
           >
           <el-button type="primary" @click="addManyDialogVisible = true"
@@ -61,7 +63,7 @@
             <p v-else-if="scope.row.type === 1">群组API</p>
           </template> -->
         </el-table-column>
-        <el-table-column label="状态">
+        <el-table-column label="状态" width="80px">
           <template slot-scope="scope">
             <div class="apiStatus">
               <font
@@ -97,14 +99,14 @@
             </el-tooltip>
             <!-- 根据状态判断，是执行/暂停按钮 -->
             <el-tooltip
-              v-if="scope.row.status === 0"
+              v-if="scope.row.status === '未监控'"
               class="item"
               effect="dark"
               content="执行"
               placement="top"
             >
               <el-button
-                v-if="scope.row.status === 0"
+                v-if="scope.row.status === '未监控'"
                 type="success"
                 icon="el-icon-caret-right"
                 size="mini"
@@ -112,14 +114,14 @@
               ></el-button>
             </el-tooltip>
             <el-tooltip
-              v-if="scope.row.type === 1"
+              v-if="scope.row.type === '监控中'"
               class="item"
               effect="dark"
               content="暂停"
               placement="top"
             >
               <el-button
-                v-if="scope.row.type === 1"
+                v-if="scope.row.type === '监控中'"
                 type="danger"
                 icon="el-icon-switch-button"
                 size="mini"
@@ -168,6 +170,7 @@
         @current-change="handleCurrentChange"
       ></el-pagination>
     </el-card>
+
     <!-- 添加单个API区域--->
     <el-dialog
       title="添加单个API"
@@ -179,58 +182,106 @@
       <el-form
         ref="addApiFormRef"
         :model="createApi"
-        :rules="addRulesApiForm"
+        :rules="addRulesMonitorForm"
         label-width="100px"
       >
-        <el-form-item label="所属系统" prop="systemName">
-          <el-input v-model="createApi.systemName"></el-input>
-        </el-form-item>
-        <el-form-item label="监控名称" prop="apiName">
-          <el-input v-model="createApi.apiName"></el-input>
-        </el-form-item>
-        <el-form-item label="API类型" prop="apiType">
+        <el-form-item label="所属系统" prop="group">
           <template>
-            <el-radio v-model="radioApiType" label="1">GET</el-radio>
-            <el-radio v-model="radioApiType" label="2">POST</el-radio>
-            <el-radio v-model="radioApiType" label="3">HEAD</el-radio>
-            <el-radio v-model="radioApiType" label="4">PUT</el-radio>
-            <el-radio v-model="radioApiType" label="5">DELETE</el-radio>
+            <el-select v-model="createApi.group" placeholder="请选择">
+              <el-option
+                v-for="item in groupsList"
+                :key="item.index"
+                :label="item.name"
+                :value="item.name"
+              >
+              </el-option>
+            </el-select>
+            <!-- 修改按钮 -->
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="新增"
+              placement="top"
+            >
+              <el-button
+                class="addGroupButton"
+                type="primary"
+                icon="el-icon-plus"
+                size="mini"
+                ricon="el-icon-plus"
+                circle
+                @click="addMonitorGroups"
+              ></el-button>
+            </el-tooltip>
           </template>
         </el-form-item>
-        <el-form-item label="API地址" prop="apiAdress">
-          <el-input v-model="createApi.apiAdress"></el-input>
+        <el-form-item label="监控名称" prop="name">
+          <el-input v-model="createApi.name"></el-input>
         </el-form-item>
-        <el-form-item label="监控频率" prop="apiFrequency">
+        <el-form-item label="API类型" prop="httpMethod">
           <template>
-            <el-radio v-model="radioApiTime" label="1">30秒</el-radio>
-            <el-radio v-model="radioApiTime" label="2">1分钟</el-radio>
-            <el-radio v-model="radioApiTime" label="3">5分钟</el-radio>
-            <el-radio v-model="radioApiTime" label="4">10分钟</el-radio>
-            <el-radio v-model="radioApiTime" label="5">30分钟</el-radio>
-            <el-radio v-model="radioApiTime" label="5">1小时</el-radio>
+            <el-radio v-model="radioApiType" label="GET">GET</el-radio>
+            <el-radio v-model="radioApiType" label="POST">POST</el-radio>
+            <el-radio v-model="radioApiType" label="HDEAD">HEAD</el-radio>
+            <el-radio v-model="radioApiType" label="PUT">PUT</el-radio>
+            <el-radio v-model="radioApiType" label="DELETE">DELETE</el-radio>
+          </template>
+        </el-form-item>
+        <el-form-item label="API地址" prop="url">
+          <el-input
+            v-model="createApi.url"
+            placeholder="http://www.baidu.com"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="监控频率" prop="frequency">
+          <template>
+            <el-radio v-model="radioApiTime" label="THIRTY">30秒</el-radio>
+            <el-radio v-model="radioApiTime" label="FIVE_MINUTES"
+              >5分钟</el-radio
+            >
+            <el-radio v-model="radioApiTime" label="THIRTY_MINUTES"
+              >10分钟</el-radio
+            >
+            <el-radio v-model="radioApiTime" label="THIRTY_MINUTES"
+              >30分钟</el-radio
+            >
+            <el-radio v-model="radioApiTime" label="ONE_HOUR">1小时</el-radio>
           </template>
         </el-form-item>
         <el-form-item label="请求头部">
           <el-input
-            v-model="createApi.apiHead"
+            v-model="createApi.headers"
             placeholder="{key: value}"
           ></el-input>
         </el-form-item>
         <el-form-item label="请求参数">
           <el-input
-            v-model="createApi.apiBody"
+            v-model="createApi.parameters"
             placeholder="{key: value}"
           ></el-input>
         </el-form-item>
-        <el-form-item label="验证结果">
+        <el-form-item label="结果校验" prop="condition">
+          <el-select
+            v-model="createApi.conditionType"
+            placeholder="请选择"
+            class="input_with_conditionType"
+          >
+            <el-option label="默认" value="DEFAULT"></el-option>
+            <el-option label="不包含" value="DOESNT_CONTAIN"></el-option>
+            <el-option label="状态码" value="STATUSCODE"></el-option>
+            <el-option label="包含" value="CONTAINS"></el-option>
+          </el-select>
           <el-input
-            v-model="createApi.apiResult"
-            placeholder="{key: value}"
-          ></el-input>
+            v-model="createApi.condition"
+            class="input_with_apiCondition"
+            placeholder="请输入内容"
+          >
+          </el-input>
         </el-form-item>
+
         <el-form-item label="备注">
           <el-input
-            v-model="createApi.apiRemarks"
+            v-model="createApi.remark"
             type="textarea"
             :rows="2"
             placeholder="请输入备注信息。"
@@ -239,110 +290,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addApi">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <!-- 添加多个API区域--->
-    <el-dialog
-      title="添加多个API"
-      :visible.sync="addManyDialogVisible"
-      width="50%"
-      @close="addManyDialogClosed"
-    >
-      <!-- 添加form区域-->
-      <el-form
-        ref="addApiFormRef"
-        :model="createApi"
-        :rules="addRulesApiForm"
-        label-width="100px"
-      >
-        <el-form-item label="所属系统" prop="systemName">
-          <el-input v-model="createApi.systemName"></el-input>
-        </el-form-item>
-        <el-form-item label="监控名称" prop="apiName">
-          <el-input v-model="createApi.apiName"></el-input>
-        </el-form-item>
-        <el-form-item label="监控频率" prop="apiFrequency">
-          <template>
-            <el-radio v-model="radioApiTime" label="1">30秒</el-radio>
-            <el-radio v-model="radioApiTime" label="2">1分钟</el-radio>
-            <el-radio v-model="radioApiTime" label="3">5分钟</el-radio>
-            <el-radio v-model="radioApiTime" label="4">10分钟</el-radio>
-            <el-radio v-model="radioApiTime" label="5">30分钟</el-radio>
-            <el-radio v-model="radioApiTime" label="5">1小时</el-radio>
-          </template>
-        </el-form-item>
-        <el-form-item label="API管理">
-          <el-button type="primary" plain @click="getUserList"
-            >导入postman脚本</el-button
-          >
-          <el-button plain @click="addDialogVisible = true"
-            >添加单个API监控</el-button
-          >
-          <!-- 列表区域-->
-          <el-table border :data="postmanApiList">
-            <el-table-column
-              type="index"
-              width="50"
-              label="序号"
-            ></el-table-column>
-            <template v-for="(item, index) in postmanTableHead">
-              <el-table-column
-                v-if="item.column_name"
-                :key="index"
-                :prop="item.column_name"
-                :label="item.column_comment"
-              ></el-table-column>
-            </template>
-            <el-table-column label="操作" width="120px">
-              <template slot-scope="scope">
-                <!-- 修改按钮 -->
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="修改"
-                  placement="top"
-                >
-                  <el-button
-                    type="primary"
-                    icon="el-icon-edit"
-                    size="mini"
-                    ricon="el-icon-edit"
-                    circle
-                    @click="showEditDialog(scope.row.id)"
-                  ></el-button>
-                </el-tooltip>
-                <!-- 删除按钮 -->
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="删除"
-                  placement="top"
-                >
-                  <el-button
-                    type="danger"
-                    icon="el-icon-delete"
-                    size="mini"
-                    circle
-                  ></el-button>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-form-item>
-        <el-form-item label="备注">
-          <el-input
-            v-model="createApi.apiRemarks"
-            type="textarea"
-            :rows="2"
-            placeholder="请输入备注信息。"
-          ></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addManyDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addApi">确 定</el-button>
+        <el-button type="primary" @click="addSingleApi()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -376,32 +324,45 @@ export default {
           mobile: 'mobile'
         }
       ],
-      addMonitor: [],
       // 添加API表单的校验对象
       addRulesMonitorForm: {
-        systemName: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+        group: [{ required: true }],
+        httpMethod: [{ required: true }],
+        condition: [
+          { required: true, message: '请输入校验信息', trigger: 'blur' }
         ],
-        apiName: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-        apiAdress: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
-        apiFrequency: [
-          { required: true, message: '请输入昵称', trigger: 'blur' }
-        ]
+        name: [{ required: true, message: '请输入api名称', trigger: 'blur' }],
+        url: [{ required: true, message: '请输入api地址', trigger: 'blur' }],
+        frequency: [{ required: true, trigger: 'blur' }]
       },
-      radioApiType: '1',
-      radioApiTime: '1',
+      radioApiType: 'GET',
+      radioApiTime: 'THIRTY',
+      apiConditionType: 'DEFAULT',
+      apiCondition: '',
       // 监听添加弹窗事件
       addDialogVisible: false,
       addManyDialogVisible: false,
+      // 新增api 系统下拉框绑定数据
+      options: [],
+      // 结果校验 下拉绑定数据
+      select: [],
+      // 新增api对象
       createApi: {
-        apiName: '',
-        name: [],
-        password: [],
-        nickName: [],
-        mobile: [],
-        email: [],
-        status: '0'
-      }
+        guid: '',
+        pguid: '',
+        group: '',
+        name: '',
+        httpMethod: '',
+        url: '',
+        frequency: '',
+        headers: '',
+        parameters: '',
+        conditionType: '',
+        condition: '',
+        remark: '',
+        type: ''
+      },
+      groupsList: []
     }
   },
   created() {
@@ -422,35 +383,69 @@ export default {
     addManyDialogClosed() {
       this.$refs.addApiFormRef.resetFields()
     },
-    addApi() {}
+    async addSingleApi() {
+      this.createApi.type = 'SINGLE'
+      this.createApi.httpMethod = this.radioApiType
+      this.createApi.frequency = this.radioApiTime
+      const { data: addMonitorRes } = await this.$api.monitor.saveSingle(
+        this.createApi
+      )
+      // 关闭 添加弹框
+      addDialogVisible = false
+      // 返回信息校验
+      if (addMonitorRes.code !== 200) {
+        return this.$message.error('新增失败！')
+      }
+    },
+    async getMonitorGroups() {
+      const { data: getMGRes } = await this.$api.monitor.getMonitorGroupsApi()
+      this.groupsList = getMGRes.data
+    },
+    async addMonitorGroups() {
+      const { data: getMGRes } = await this.$api.monitor.getMonitorGroupsApi()
+      this.groupsList = getMGRes.data
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.apiNoActive::before {
-  content: '';
-  display: block;
-  width: 10px;
-  height: 10px;
-  background: #f56c6c;
-  border-radius: 50%;
-  position: absolute;
-  left: 10px;
-  top: 20px;
-}
-.apiActive::before {
-  content: '';
-  display: block;
-  width: 10px;
-  height: 10px;
-  background: #67c23a;
-  border-radius: 50%;
-  position: absolute;
-  left: 10px;
-  top: 20px;
-}
 .apiStatus {
   padding-left: 10px;
+  .apiActive::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: #67c23a;
+    border-radius: 50%;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .apiNoActive::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: #f56c6c;
+    border-radius: 50%;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+.addGroupButton {
+  margin-left: 10px;
+}
+.input_with_apiCondition {
+  width: 70%;
+  background-color: #fff;
+}
+.input_with_conditionType {
+  width: 30%;
+  background-color: #fff;
 }
 </style>
