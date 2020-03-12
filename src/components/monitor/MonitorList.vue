@@ -37,44 +37,28 @@
       </el-row>
       <!-- api列表区域-->
       <el-table border :data="monitorList">
-        <el-table-column
-          type="index"
-          width="50px"
-          label="序号"
-        ></el-table-column>
-        <el-table-column label="ID" prop="guid"></el-table-column>
-        <el-table-column label="所属系统">
+        <el-table-column width="50px" label="ID" prop="id"></el-table-column>
+        <el-table-column label="GroupId" prop="guid"></el-table-column>
+        <el-table-column label="GroupIdName">
           <template slot-scope="scope">
             <el-link type="primary">{{ scope.row.group }}</el-link>
           </template>
         </el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
-        <el-table-column
-          label="监控频率(秒)"
-          prop="frequency"
-        ></el-table-column>
-        <el-table-column
-          label="可用率(百分比)"
-          prop="usability"
-        ></el-table-column>
+        <el-table-column label="监控频率" prop="frequency"></el-table-column>
+        <el-table-column label="可用率" prop="usability"></el-table-column>
         <el-table-column label="类型" width="80px" prop="type">
-          <!-- <template slot-scope="scope">
-            <p v-if="scope.row.type === 0">单个API</p>
-            <p v-else-if="scope.row.type === 1">群组API</p>
-          </template> -->
+        </el-table-column>
+        <el-table-column label="api状态" width="80px" prop="status">
         </el-table-column>
         <el-table-column label="状态" width="80px">
           <template slot-scope="scope">
             <div class="apiStatus">
-              <font
-                v-if="scope.row.status === '未监控'"
-                color="#F56C6C"
-                class="apiNoActive"
-              >
-                未监控
+              <font v-if="scope.row.enabled" color="#67C23A" class="apiActive">
+                启动中
               </font>
-              <font v-else color="#67C23A" class="apiActive">
-                监控中
+              <font v-else color="#F56C6C" class="apiNoActive">
+                未启动
               </font>
             </div>
           </template>
@@ -99,30 +83,13 @@
             </el-tooltip>
             <!-- 根据状态判断，是执行/暂停按钮 -->
             <el-tooltip
-              v-if="scope.row.status === '未监控'"
-              class="item"
-              effect="dark"
-              content="执行"
-              placement="top"
-            >
-              <el-button
-                v-if="scope.row.status === '未监控'"
-                type="success"
-                icon="el-icon-caret-right"
-                size="mini"
-                circle
-                @click="enableMonitor(scope)"
-              ></el-button>
-            </el-tooltip>
-            <el-tooltip
-              v-if="scope.row.type === '监控中'"
+              v-if="scope.row.enabled"
               class="item"
               effect="dark"
               content="暂停"
               placement="top"
             >
               <el-button
-                v-if="scope.row.type === '监控中'"
                 type="danger"
                 icon="el-icon-switch-button"
                 size="mini"
@@ -130,6 +97,23 @@
                 @click="enableMonitor(scope)"
               ></el-button>
             </el-tooltip>
+
+            <el-tooltip
+              v-else
+              class="item"
+              effect="dark"
+              content="执行"
+              placement="top"
+            >
+              <el-button
+                type="success"
+                icon="el-icon-caret-right"
+                size="mini"
+                circle
+                @click="enableMonitor(scope)"
+              ></el-button>
+            </el-tooltip>
+
             <!-- 查看日志按钮 -->
             <el-tooltip
               class="item"
@@ -188,41 +172,21 @@
         label-width="100px"
       >
         <el-form-item label="所属系统" prop="group">
-          <!-- 下拉框跟输入一体的input -->
-          <!-- <el-autocomplete
+          <el-select
             v-model="createApi.group"
-            class="inline-input"
-            :fetch-suggestions="getMonitorGroups()"
-            placeholder="请输入或选择系统"
-            @select="getMonitorGroups()"
-          ></el-autocomplete> -->
-          <template>
-            <el-select v-model="createApi.group" placeholder="请选择">
-              <el-option
-                v-for="item in groupsList"
-                :key="item.index"
-                :label="item.name"
-                :value="item.name"
-              >
-              </el-option>
-            </el-select>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="新增"
-              placement="top"
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请输入或者选择系统"
+          >
+            <el-option
+              v-for="item in groupsList"
+              :key="item.index"
+              :label="item.name"
+              :value="item.name"
             >
-              <el-button
-                class="addGroupButton"
-                type="primary"
-                icon="el-icon-plus"
-                size="mini"
-                ricon="el-icon-plus"
-                circle
-                @click="addMonitorGroups"
-              ></el-button>
-            </el-tooltip>
-          </template>
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="监控名称" prop="name">
           <el-input v-model="createApi.name"></el-input>
@@ -371,7 +335,7 @@ export default {
         remark: '',
         type: ''
       },
-      groupsList: [],
+      groupsList: {},
       enableMonitorBody: {
         guid: '',
         enabled: ''
@@ -403,12 +367,12 @@ export default {
       const { data: addMonitorRes } = await this.$api.monitor.saveSingle(
         this.createApi
       )
-      // 关闭 添加弹框
-      addDialogVisible = false
       // 返回信息校验
       if (addMonitorRes.code !== 200) {
         return this.$message.error('新增失败！')
       }
+      // 关闭 添加弹框
+      this.addDialogVisible = false
     },
     async getMonitorGroups() {
       const { data: getMGRes } = await this.$api.monitor.getMonitorGroupsApi()
@@ -419,12 +383,17 @@ export default {
       this.groupsList = getMGRes.data
     },
     async enableMonitor(scope) {
-      console.log(scope)
+      console.log(scope, 'scope')
       this.enableMonitorBody.enabled = scope.row.enabled
       this.enableMonitorBody.guid = scope.row.guid
       const { data: getMGRes } = await this.$api.monitor.enableMonitorApi(
         this.enableMonitorBody
       )
+      console.log(getMGRes)
+      if (getMGRes.code === 200) {
+        this.getMonitorList()
+        return this.$message.success('修改成功！')
+      }
     }
   }
 }
