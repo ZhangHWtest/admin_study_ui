@@ -7,7 +7,6 @@ import Users from '../components/user/User.vue'
 import Role from '../components/role/Role.vue'
 import Demo from '../components/demo/demo.vue'
 import Limits from '../components/limits/Limits.vue'
-import MonitorChart from '../components/monitor/MonitorChart.vue'
 import MonitorList from '../components/monitor/MonitorList.vue'
 import LogList from '../components/monitor/LogList.vue'
 import TodayList from '../components/courseinfo/TodayList.vue'
@@ -31,10 +30,13 @@ const routes = [
       { path: '/user/limits', component: Limits },
       { path: '/courseinfo/todaylist', component: TodayList },
       { path: '/courseinfo/yesterdaylist', component: YesterdayList },
-      { path: '/monitor/chart', component: MonitorChart },
       { path: '/monitor/list', component: MonitorList },
       { path: '/monitor/logList', component: LogList },
-      { path: '/student/list', component: StudentList }
+      { path: '/student/list', component: StudentList },
+      {
+        path: '/monitor/chart',
+        component: () => import('@/views/monitor/index')
+      }
     ]
   }
 ]

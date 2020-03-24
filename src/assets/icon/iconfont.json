@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "6151095",
+      "name": "paper plane-fill",
+      "font_class": "paperplane-fill",
+      "unicode": "e7a9",
+      "unicode_decimal": 59305
+    },
+    {
+      "icon_id": "6151099",
+      "name": "flag-fill",
+      "font_class": "flag-fill",
+      "unicode": "e7ad",
+      "unicode_decimal": 59309
+    },
+    {
+      "icon_id": "6151111",
+      "name": "cry-fill",
+      "font_class": "cry-fill",
+      "unicode": "e7b6",
+      "unicode_decimal": 59318
+    },
+    {
+      "icon_id": "6151113",
+      "name": "smile-fill",
+      "font_class": "smile-fill",
+      "unicode": "e7b7",
+      "unicode_decimal": 59319
+    },
+    {
       "icon_id": "7766709",
       "name": "icon_add",
       "font_class": "icon_add",
