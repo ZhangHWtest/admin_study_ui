@@ -11,8 +11,8 @@
       <el-row :gutter="30">
         <el-col :span="5">
           <el-input
-            v-model="findMonitorBody.apiName"
-            placeholder="请输入API名称"
+            v-model="findMonitorBody.monitorName"
+            placeholder="请输入jobName"
             class="input-with-select"
             clearable
             @clear="getMonitorList"
@@ -38,20 +38,32 @@
       <!-- api列表区域-->
       <el-table border :data="monitorList">
         <el-table-column width="50px" label="ID" prop="id"></el-table-column>
-        <el-table-column label="GroupId" prop="guid"></el-table-column>
-        <el-table-column label="GroupIdName">
+        <el-table-column label="jobId" prop="jobId"></el-table-column>
+        <el-table-column label="jobName">
           <template slot-scope="scope">
-            <el-link type="primary">{{ scope.row.group }}</el-link>
+            <el-link type="primary">{{ scope.row.jobName }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column label="名称" prop="name"></el-table-column>
-        <el-table-column label="监控频率" prop="frequency"></el-table-column>
-        <el-table-column label="可用率" prop="usability"></el-table-column>
-        <el-table-column label="类型" width="80px" prop="type">
+        <el-table-column label="系统名称" prop="httpSystem"></el-table-column>
+        <el-table-column label="API名称" prop="httpName"></el-table-column>
+        <el-table-column label="类型" prop="type">
+          <template slot-scope="scope">
+            <font v-if="scope.row.type === 0">
+              单个api
+            </font>
+            <font v-else>
+              多个api
+            </font>
+          </template>
         </el-table-column>
-        <el-table-column label="api状态" width="80px" prop="status">
+        <el-table-column
+          label="备注"
+          width="80px"
+          prop="remark"
+        ></el-table-column>
+        <el-table-column label="监控表达式" width="80px" prop="jobCron">
         </el-table-column>
-        <el-table-column label="状态" width="80px">
+        <el-table-column label="监控状态" width="80px">
           <template slot-scope="scope">
             <div class="apiStatus">
               <font v-if="scope.row.enabled" color="#67C23A" class="apiActive">
@@ -78,12 +90,12 @@
                 size="mini"
                 ricon="el-icon-edit"
                 circle
-                @click="showEditDialog(scope.row.guid)"
+                @click="showEditDialog(scope.row.jobId)"
               ></el-button>
             </el-tooltip>
             <!-- 根据状态判断，是执行/暂停按钮 -->
             <el-tooltip
-              v-if="scope.row.enabled"
+              v-if="scope.row.enabled === 1"
               class="item"
               effect="dark"
               content="暂停"
@@ -147,9 +159,9 @@
       </el-table>
       <!-- 分页-->
       <el-pagination
-        :current-page="findMonitorBody.pagenum"
+        :current-page="findMonitorBody.pageNum"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="findMonitorBody.pagesize"
+        :page-size="findMonitorBody.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         @size-change="handleSizeChange"
@@ -171,9 +183,9 @@
         :rules="addRulesMonitorForm"
         label-width="100px"
       >
-        <el-form-item label="所属系统" prop="group">
+        <el-form-item label="系统名称" prop="httpSystemId">
           <el-select
-            v-model="createApi.group"
+            v-model="createApi.systemName"
             filterable
             allow-create
             default-first-option
@@ -182,70 +194,79 @@
             <el-option
               v-for="item in groupsList"
               :key="item.index"
-              :label="item.name"
-              :value="item.name"
+              :label="item.systemName"
+              :value="item.systemName"
             >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="监控名称" prop="name">
-          <el-input v-model="createApi.name"></el-input>
+        <el-form-item label="job名称" prop="jobName">
+          <el-input v-model="createApi.jobName"></el-input>
+        </el-form-item>
+        <el-form-item label="api名称" prop="httpName">
+          <el-input v-model="createApi.httpName"></el-input>
         </el-form-item>
         <el-form-item label="API类型" prop="httpMethod">
           <template>
-            <el-radio v-model="radioApiType" label="GET">GET</el-radio>
-            <el-radio v-model="radioApiType" label="POST">POST</el-radio>
-            <el-radio v-model="radioApiType" label="HDEAD">HEAD</el-radio>
-            <el-radio v-model="radioApiType" label="PUT">PUT</el-radio>
-            <el-radio v-model="radioApiType" label="DELETE">DELETE</el-radio>
+            <el-radio v-model="radioApiType" label="0">GET</el-radio>
+            <el-radio v-model="radioApiType" label="1">POST</el-radio>
+            <el-radio v-model="radioApiType" label="2">HEAD</el-radio>
+            <el-radio v-model="radioApiType" label="3">PUT</el-radio>
+            <el-radio v-model="radioApiType" label="4">DELETE</el-radio>
           </template>
         </el-form-item>
-        <el-form-item label="API地址" prop="url">
+        <el-form-item label="API地址" prop="httpUrl">
           <el-input
-            v-model="createApi.url"
+            v-model="createApi.httpUrl"
             placeholder="http://www.baidu.com"
           ></el-input>
         </el-form-item>
-        <el-form-item label="监控频率" prop="frequency">
+        <el-form-item label="监控表达式" prop="jobCron">
           <template>
-            <el-radio v-model="radioApiTime" label="THIRTY">30秒</el-radio>
-            <el-radio v-model="radioApiTime" label="FIVE_MINUTES"
+            <el-radio v-model="radioApiTime" label="0/15 * * * * ?"
+              >15秒</el-radio
+            >
+            <el-radio v-model="radioApiTime" label="0/30 * * * * ?"
+              >30秒</el-radio
+            >
+            <el-radio v-model="radioApiTime" label="0 0/1 * * * ?"
+              >1分钟</el-radio
+            >
+            <el-radio v-model="radioApiTime" label="0 0/5 * * * ?"
               >5分钟</el-radio
             >
-            <el-radio v-model="radioApiTime" label="THIRTY_MINUTES"
-              >10分钟</el-radio
-            >
-            <el-radio v-model="radioApiTime" label="THIRTY_MINUTES"
+            <el-radio v-model="radioApiTime" label="0 0/30 * * * ?"
               >30分钟</el-radio
             >
-            <el-radio v-model="radioApiTime" label="ONE_HOUR">1小时</el-radio>
           </template>
         </el-form-item>
         <el-form-item label="请求头部">
           <el-input
-            v-model="createApi.headers"
-            placeholder="{key: value}"
+            v-model="createApi.httpHeaders"
+            type="textarea"
+            placeholder="{key:value,key:value}"
           ></el-input>
         </el-form-item>
         <el-form-item label="请求参数">
           <el-input
-            v-model="createApi.parameters"
-            placeholder="{key: value}"
+            v-model="createApi.httpBody"
+            type="textarea"
+            placeholder="{key:value,key:value}"
           ></el-input>
         </el-form-item>
-        <el-form-item label="结果校验" prop="condition">
+        <el-form-item label="结果校验" prop="conditionType">
           <el-select
             v-model="createApi.conditionType"
             placeholder="请选择"
             class="input_with_conditionType"
           >
-            <el-option label="默认" value="DEFAULT"></el-option>
-            <el-option label="不包含" value="DOESNT_CONTAIN"></el-option>
-            <el-option label="状态码" value="STATUSCODE"></el-option>
-            <el-option label="包含" value="CONTAINS"></el-option>
+            <el-option label="默认" value="0"></el-option>
+            <el-option label="不包含" value="1"></el-option>
+            <el-option label="状态码" value="2"></el-option>
+            <el-option label="包含" value="3"></el-option>
           </el-select>
           <el-input
-            v-model="createApi.condition"
+            v-model="createApi.conditionBody"
             class="input_with_apiCondition"
             placeholder="请输入内容"
           >
@@ -266,6 +287,8 @@
         <el-button type="primary" @click="addSingleApi()">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 修改单个API区域--->
+    
   </div>
 </template>
 <script>
@@ -275,11 +298,11 @@ export default {
       // 搜索绑定数据
       findMonitorBody: {
         monitorName: '',
-        pagenum: '',
-        pagesize: ''
+        pageNum: 1,
+        pageSize: 10
       },
       // 返回总条数
-      monitorTotal: 0,
+      total: 0,
       // 列表展示数据
       monitorList: {},
 
@@ -299,18 +322,25 @@ export default {
       ],
       // 添加API表单的校验对象
       addRulesMonitorForm: {
-        group: [{ required: true }],
-        httpMethod: [{ required: true }],
-        condition: [
-          { required: true, message: '请输入校验信息', trigger: 'blur' }
+        systemName: [{ required: true }],
+        jobName: [
+          { required: true, message: '请输入Job名称', trigger: 'blur' }
         ],
-        name: [{ required: true, message: '请输入api名称', trigger: 'blur' }],
-        url: [{ required: true, message: '请输入api地址', trigger: 'blur' }],
-        frequency: [{ required: true, trigger: 'blur' }]
+        httpName: [
+          { required: true, message: '请输入api名称', trigger: 'blur' }
+        ],
+        httpMethod: [{ required: true }],
+        httpUrl: [
+          { required: true, message: '请输入api地址', trigger: 'blur' }
+        ],
+        jobCron: [{ required: true, trigger: 'blur' }],
+        conditionType: [{ required: true, trigger: 'blur' }],
+        conditionBody: [{ required: true, trigger: 'blur' }]
       },
-      radioApiType: 'GET',
-      radioApiTime: 'THIRTY',
-      apiConditionType: 'DEFAULT',
+
+      radioApiType: '0',
+      radioApiTime: '0/15 * * * * ?',
+      apiConditionType: '0',
       apiCondition: '',
       // 监听添加弹窗事件
       addDialogVisible: false,
@@ -321,23 +351,22 @@ export default {
       select: [],
       // 新增api对象
       createApi: {
-        guid: '',
-        pguid: '',
-        group: '',
-        name: '',
-        httpMethod: '',
-        url: '',
-        frequency: '',
-        headers: '',
-        parameters: '',
-        conditionType: '',
-        condition: '',
+        systemName: '',
+        jobName: '',
+        httpName: '',
+        type: '',
         remark: '',
-        type: ''
+        jobCron: '',
+        httpUrl: '',
+        httpMethod: '',
+        httpHeaders: '',
+        httpBody: '',
+        conditionType: '',
+        conditconditionBodyion: ''
       },
       groupsList: {},
       enableMonitorBody: {
-        guid: '',
+        jobId: '',
         enabled: ''
       }
     }
@@ -347,12 +376,25 @@ export default {
   },
   methods: {
     async getMonitorList() {
-      const { data: monitorRes } = await this.$api.monitor.monitorList()
+      const { data: monitorRes } = await this.$api.monitor.monitorList(
+        this.findMonitorBody
+      )
+      console.log(monitorRes)
       if (monitorRes.code !== 200) {
-        return this.$message.error('获取用户列表失败！')
+        return this.$message.error('获取监控列表失败！')
       }
-      this.monitorList = monitorRes.data
-      this.monitortotal = monitorRes.data.total
+      this.monitorList = monitorRes.data.monitor
+      this.total = monitorRes.data.total
+    },
+    // 监听pagesize改变的事件
+    handleSizeChange(newSize) {
+      this.findMonitorBody.pageSize = newSize
+      this.getMonitorList()
+    },
+    // 监听 页码值改变的事件
+    handleCurrentChange(newPage) {
+      this.findMonitorBody.pageNum = newPage
+      this.getMonitorList()
     },
     addDialogClosed() {
       this.$refs.addApiFormRef.resetFields()
@@ -361,9 +403,9 @@ export default {
       this.$refs.addApiFormRef.resetFields()
     },
     async addSingleApi() {
-      this.createApi.type = 'SINGLE'
+      this.createApi.type = '0'
       this.createApi.httpMethod = this.radioApiType
-      this.createApi.frequency = this.radioApiTime
+      this.createApi.jobCron = this.radioApiTime
       const { data: addMonitorRes } = await this.$api.monitor.saveSingle(
         this.createApi
       )
@@ -384,8 +426,12 @@ export default {
     },
     async enableMonitor(scope) {
       console.log(scope, 'scope')
-      this.enableMonitorBody.enabled = scope.row.enabled
-      this.enableMonitorBody.guid = scope.row.guid
+      if (scope.row.enabled === 1) {
+        this.enableMonitorBody.enabled = 0
+      } else {
+        this.enableMonitorBody.enabled = 1
+      }
+      this.enableMonitorBody.jobId = scope.row.jobId
       const { data: getMGRes } = await this.$api.monitor.enableMonitorApi(
         this.enableMonitorBody
       )
@@ -394,6 +440,7 @@ export default {
         this.getMonitorList()
         return this.$message.success('修改成功！')
       }
+      return this.$message.error('修改失败！')
     }
   }
 }

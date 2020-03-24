@@ -333,11 +333,6 @@ export default {
       this.editForm.lastUpdateBy = window.sessionStorage.getItem('token')
       this.$refs.editFormRef.validate(async valid => {
         if (!valid) return
-        // 发起用户请求
-        // const { data: res } = await this.$http.post(
-        //   '/user/update',
-        //   this.editForm
-        // )
         const { data: res } = await this.$api.user.update(this.editForm)
         if (res.code !== 200) {
           return this.$message.error('修改用户信息失败！')
