@@ -375,7 +375,7 @@ export default {
       require.ensure([], () => {
         // 标红是没有驼峰命名
         // const { export_json_to_excel } = require('@/vendor/Export2Excel')
-        const { exportJsonToExcel } = require('../../vendor/Export2Excel')
+        const { exportJsonToExcel } = require('../../utils/Export2Excel')
         // 要输出的表头
         const tHeader = [
           'id',

@@ -84,7 +84,7 @@ export default {
     // 导出数据
     exportData() {
       require.ensure([], () => {
-        const { exportJsonToExcel } = require('../../vendor/Export2Excel')
+        const { exportJsonToExcel } = require('../../utils/Export2Excel')
         // 要输出的表头
         const tHeader = [
           '课程名称',

@@ -35,9 +35,17 @@ const routes = [
       { path: '/student/list', component: StudentList },
       {
         path: '/monitor/chart',
-        component: () => import('@/views/monitor/index')
+        component: () => import('@/views/monitorChart/index')
+      },
+      {
+        path: '/monitor/listT',
+        component: () => import('@/views/monitorList/index')
       }
     ]
+  },
+  {
+    path: '*',
+    component: () => import('@/views/error-page/404.vue')
   }
 ]
 
