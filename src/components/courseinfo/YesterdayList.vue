@@ -51,77 +51,77 @@ export default {
   data() {
     return {
       findYesterDayBody: {
-        mes: '',
-        status: '',
+        mes: "",
+        status: "",
         pageNum: 1,
         pageSize: 10
       },
       total: 0,
       tableHead: [
-        { column_name: 'course_name', column_comment: '课程名称' },
-        { column_name: 'content_title', column_comment: '直播名称' },
-        { column_name: 'start_time', column_comment: '开课时间' },
-        { column_name: 'school_name', column_comment: '学院' },
-        { column_name: 'student_number', column_comment: '报名人数' },
-        { column_name: 'real_number', column_comment: '上课人数' },
-        { column_name: 'class_rate', column_comment: '到课率' }
+        { column_name: "course_name", column_comment: "课程名称" },
+        { column_name: "content_title", column_comment: "直播名称" },
+        { column_name: "start_time", column_comment: "开课时间" },
+        { column_name: "school_name", column_comment: "学院" },
+        { column_name: "student_number", column_comment: "报名人数" },
+        { column_name: "real_number", column_comment: "上课人数" },
+        { column_name: "class_rate", column_comment: "到课率" }
       ],
       yesterDayList: []
-    }
+    };
   },
   // 生命周期函数，进页面加载
   created() {
-    this.getYesterDayList()
+    this.getYesterDayList();
   },
   methods: {
     async getYesterDayList() {
       const { data: userRes } = await this.$api.course.findYesterDayList(
         this.findYesterDayBody
-      )
+      );
       if (userRes.code !== 1) {
-        return this.$message.error('获取用户列表失败！')
+        return this.$message.error("获取用户列表失败！");
       }
-      this.yesterDayList = userRes.data
+      this.yesterDayList = userRes.data;
     },
     // 导出数据
     exportData() {
       require.ensure([], () => {
         // 标红是没有驼峰命名
         // const { export_json_to_excel } = require('@/vendor/Export2Excel')
-        const { exportJsonToExcel } = require('../../utils/Export2Excel')
+        const { exportJsonToExcel } = require("../../utils/Export2Excel");
         // 要输出的表头
         const tHeader = [
-          '课程名称',
-          '直播名称',
-          '开课时间',
-          '学院',
-          '报名人数',
-          '上课人数',
-          '到课率'
-        ]
+          "课程名称",
+          "直播名称",
+          "开课时间",
+          "学院",
+          "报名人数",
+          "上课人数",
+          "到课率"
+        ];
         // 表头对应的内容, 会从下行定义的 list 里去找相应的数据
         const filterVal = [
-          'course_name',
-          'content_title',
-          'start_time',
-          'school_name',
-          'student_number',
-          'real_number',
-          'class_rate'
-        ]
+          "course_name",
+          "content_title",
+          "start_time",
+          "school_name",
+          "student_number",
+          "real_number",
+          "class_rate"
+        ];
         // 数据来源
-        const list = this.yesterDayList
-        const data = this.formatJson(filterVal, list)
-        const time = this.$moment(new Date()).format('YYYY-MM-DD')
+        const list = this.yesterDayList;
+        const data = this.formatJson(filterVal, list);
+        const time = this.$moment(new Date()).format("YYYY-MM-DD");
         // fileName: 要导出的表格名称
-        exportJsonToExcel(tHeader, data, '昨日课程' + time)
-      })
+        exportJsonToExcel(tHeader, data, "昨日课程" + time);
+      });
     },
     formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]))
+      return jsonData.map(v => filterVal.map(j => v[j]));
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped></style>

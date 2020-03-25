@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       getStudentBody: {
-        mobile: '13933006634',
+        mobile: "13933006634",
         pageNum: 1,
         pageSize: 10
       },
@@ -67,40 +67,40 @@ export default {
       studentList: {},
       // table 头名称
       tableHead: [
-        { column_name: 'course_id', column_comment: '课程ID' },
-        { column_name: 'course_name', column_comment: '课程名称' }
+        { column_name: "course_id", column_comment: "课程ID" },
+        { column_name: "course_name", column_comment: "课程名称" }
       ]
-    }
+    };
   },
   created() {
-    this.getStudentList()
+    this.getStudentList();
   },
   methods: {
     async getStudentList() {
       const { data: studentRes } = await this.$api.student.findStudentList(
         this.getStudentBody
-      )
-      console.log(studentRes)
+      );
+      console.log(studentRes);
       if (studentRes.code !== 200) {
-        return this.$message.error('获取学生课程列表失败！')
+        return this.$message.error("获取学生课程列表失败！");
       }
-      this.studentList = studentRes.data
-      this.total = studentRes.total
-      this.pageNum = studentRes.pageNum
-      this.pageSize = studentRes.pageSize
+      this.studentList = studentRes.data;
+      this.total = studentRes.total;
+      this.pageNum = studentRes.pageNum;
+      this.pageSize = studentRes.pageSize;
     },
     // 监听pagesize改变的事件
     handleSizeChange(newSize) {
-      this.getStudentBody.pageSize = newSize
-      this.getStudentList()
+      this.getStudentBody.pageSize = newSize;
+      this.getStudentList();
     },
     // 监听 页码值改变的事件
     handleCurrentChange(newPage) {
-      this.getStudentBody.pageNum = newPage
-      this.getStudentList()
+      this.getStudentBody.pageNum = newPage;
+      this.getStudentList();
     }
   }
-}
+};
 </script>
 
 <style scoped></style>

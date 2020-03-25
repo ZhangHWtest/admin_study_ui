@@ -181,41 +181,41 @@ export default {
   data() {
     // 验证邮箱的自定义规则
     var checkEmail = (rule, value, cb) => {
-      const regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+      const regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       if (regEmail.test(value)) {
-        return cb()
+        return cb();
       }
-      cb(new Error('请输入合法的邮箱！'))
-    }
+      cb(new Error("请输入合法的邮箱！"));
+    };
     // 验证手机号的自定义规则˝
     var checkMobile = (rule, value, cb) => {
-      const regMobile = /^1[3456789]\d{9}$/
+      const regMobile = /^1[3456789]\d{9}$/;
       if (regMobile.test(value)) {
-        return cb()
+        return cb();
       }
-      cb(new Error('请输入正确的手机号！'))
-    }
+      cb(new Error("请输入正确的手机号！"));
+    };
     return {
-      timeValue: '',
+      timeValue: "",
       // 获取用户列表的参数对象
       queryInfo: {
-        mes: '',
-        status: '',
-        startTime: '',
-        endTime: '',
+        mes: "",
+        status: "",
+        startTime: "",
+        endTime: "",
         pageNum: 1,
         pageSize: 10
       },
       total: 0,
       tableHead: [
-        { column_name: 'id', column_comment: 'ID' },
-        { column_name: 'name', column_comment: '姓名' },
-        { column_name: 'nickName', column_comment: '昵称' },
-        { column_name: 'mobile', column_comment: '电话' },
-        { column_name: 'email', column_comment: '邮箱' },
-        { column_name: 'createTime', column_comment: '创建时间' },
-        { column_name: 'updateTime', column_comment: '修改时间' },
-        { column_name: 'lastUpdateBy', column_comment: '最后修改人' }
+        { column_name: "id", column_comment: "ID" },
+        { column_name: "name", column_comment: "姓名" },
+        { column_name: "nickName", column_comment: "昵称" },
+        { column_name: "mobile", column_comment: "电话" },
+        { column_name: "email", column_comment: "邮箱" },
+        { column_name: "createTime", column_comment: "创建时间" },
+        { column_name: "updateTime", column_comment: "修改时间" },
+        { column_name: "lastUpdateBy", column_comment: "最后修改人" }
       ],
       userList: [],
       // 控制添加用户对话框的显示隐藏
@@ -227,22 +227,22 @@ export default {
         nickName: [],
         mobile: [],
         email: [],
-        status: '0'
+        status: "0"
       },
       // 添加用户表单的校验对象
       addRulesForm: {
-        name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-        nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
+        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        nickName: [{ required: true, message: "请输入昵称", trigger: "blur" }],
         mobile: [
-          { required: true, message: '请输入电话', trigger: 'blur' },
-          { validator: checkMobile, trigger: 'blur' }
+          { required: true, message: "请输入电话", trigger: "blur" },
+          { validator: checkMobile, trigger: "blur" }
         ],
         email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { validator: checkEmail, trigger: 'blur' }
+          { required: true, message: "请输入邮箱", trigger: "blur" },
+          { validator: checkEmail, trigger: "blur" }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        status: [{ required: true, message: "请选择状态", trigger: "blur" }]
       },
       // 控制修改用户对话框的显示与隐藏
       editDialogVisible: false,
@@ -252,165 +252,165 @@ export default {
       },
       options: [
         {
-          value: '0',
-          label: '禁用'
+          value: "0",
+          label: "禁用"
         },
         {
-          value: '1',
-          label: '启用'
+          value: "1",
+          label: "启用"
         },
         {
-          value: '',
-          label: '全部'
+          value: "",
+          label: "全部"
         }
       ]
-    }
+    };
   },
   created() {
-    this.getUserList()
+    this.getUserList();
   },
   methods: {
     async getUserList() {
-      this.queryInfo.startTime = this.timeValue[0]
-      this.queryInfo.endTime = this.timeValue[1]
-      const { data: userRes } = await this.$api.user.findPage(this.queryInfo)
+      this.queryInfo.startTime = this.timeValue[0];
+      this.queryInfo.endTime = this.timeValue[1];
+      const { data: userRes } = await this.$api.user.findPage(this.queryInfo);
       if (userRes.code !== 200) {
-        return this.$message.error('获取用户列表失败！')
+        return this.$message.error("获取用户列表失败！");
       }
-      this.userList = userRes.data.users
-      this.total = userRes.data.total
+      this.userList = userRes.data.users;
+      this.total = userRes.data.total;
     },
     // 监听pagesize改变的事件
     handleSizeChange(newSize) {
-      this.queryInfo.pageSize = newSize
-      this.getUserList()
+      this.queryInfo.pageSize = newSize;
+      this.getUserList();
     },
     // 监听 页码值改变的事件
     handleCurrentChange(newPage) {
-      this.queryInfo.pageNum = newPage
-      this.getUserList()
+      this.queryInfo.pageNum = newPage;
+      this.getUserList();
     },
     // 监听添加用户对话框关闭事件
     addDialogClosed() {
-      this.$refs.addFormRef.resetFields()
+      this.$refs.addFormRef.resetFields();
     },
     // 点击”确认“提交前的预校验
     addUser() {
       this.$refs.addFormRef.validate(async valid => {
-        if (!valid) return
+        if (!valid) return;
         // 校验通过可以发起添加请求了
         // const { data: res } = await this.$http.post(
         //   '/user/create',
         //   this.createUser
         // )
-        const { data: res } = await this.$api.user.create(this.createUser)
+        const { data: res } = await this.$api.user.create(this.createUser);
         if (res.code !== 200) {
-          this.$message.error('添加用户失败！')
+          this.$message.error("添加用户失败！");
         }
-        this.$message.success('添加用户成功！')
+        this.$message.success("添加用户成功！");
         // 添加成功关闭对话框
-        this.addDialogVisible = false
+        this.addDialogVisible = false;
         // 重新获取列表数据
-        this.getUserList()
-      })
+        this.getUserList();
+      });
     },
     // 展示编辑用户的对话框
     async showEditDialog(id) {
       // const { data: res } = await this.$http.get('/user/getuserbyid/' + id)
-      const { data: res } = await this.$api.user.getuserbyid(id)
+      const { data: res } = await this.$api.user.getuserbyid(id);
       if (res.code !== 200) {
-        return this.$message.error('查询用户信息失败！')
+        return this.$message.error("查询用户信息失败！");
       }
 
-      this.editForm = res.data
-      this.editDialogVisible = true
+      this.editForm = res.data;
+      this.editDialogVisible = true;
     },
     editDialogClosed() {
-      this.$refs.editFormRef.resetFields()
+      this.$refs.editFormRef.resetFields();
     },
     // 修改用户信息并提交
     editUserInfo() {
-      this.editForm.lastUpdateBy = window.sessionStorage.getItem('token')
+      this.editForm.lastUpdateBy = window.sessionStorage.getItem("token");
       this.$refs.editFormRef.validate(async valid => {
-        if (!valid) return
-        const { data: res } = await this.$api.user.update(this.editForm)
+        if (!valid) return;
+        const { data: res } = await this.$api.user.update(this.editForm);
         if (res.code !== 200) {
-          return this.$message.error('修改用户信息失败！')
+          return this.$message.error("修改用户信息失败！");
         }
         // 关闭对框
-        this.editDialogVisible = false
+        this.editDialogVisible = false;
         // 刷新数据
-        this.getUserList()
+        this.getUserList();
         // 提示信息
-        this.$message.success('更新成功！')
-      })
+        this.$message.success("更新成功！");
+      });
     },
     // 根据id删除
     async removeUserById(id) {
       // 弹窗询问是否删除
       const confirmResult = await this.$confirm(
-        '此操作将永久删除该用户, 是否继续?',
-        '提示',
+        "此操作将永久删除该用户, 是否继续?",
+        "提示",
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
         }
-      ).catch(err => err)
-      if (confirmResult !== 'confirm') {
-        return this.$message.info('已取消删除！')
+      ).catch(err => err);
+      if (confirmResult !== "confirm") {
+        return this.$message.info("已取消删除！");
       }
       // const { data: res } = await this.$http.delete('/user/deleteuser/' + id)
-      const { data: res } = await this.$api.user.deleteuser(id)
+      const { data: res } = await this.$api.user.deleteuser(id);
       if (res.code !== 200) {
-        return this.$message.error('删除用户信息失败！')
+        return this.$message.error("删除用户信息失败！");
       }
       // 提示信息
-      this.$message.success('删除成功！')
+      this.$message.success("删除成功！");
       // 刷新数据
-      this.getUserList()
+      this.getUserList();
     },
     // 导出数据
     exportData() {
       require.ensure([], () => {
         // 标红是没有驼峰命名
         // const { export_json_to_excel } = require('@/vendor/Export2Excel')
-        const { exportJsonToExcel } = require('../../utils/Export2Excel')
+        const { exportJsonToExcel } = require("../../utils/Export2Excel");
         // 要输出的表头
         const tHeader = [
-          'id',
-          '姓名',
-          '昵称',
-          '电话',
-          '邮箱',
-          '创建时间',
-          '修改时间',
-          '最后修改人'
-        ]
+          "id",
+          "姓名",
+          "昵称",
+          "电话",
+          "邮箱",
+          "创建时间",
+          "修改时间",
+          "最后修改人"
+        ];
         // 表头对应的内容, 会从下行定义的 list 里去找相应的数据
         const filterVal = [
-          'id',
-          'name',
-          'nickName',
-          'mobile',
-          'email',
-          'createTime',
-          'updateTime',
-          'lastUpdateBy'
-        ]
+          "id",
+          "name",
+          "nickName",
+          "mobile",
+          "email",
+          "createTime",
+          "updateTime",
+          "lastUpdateBy"
+        ];
         // 数据来源
-        const list = this.userList
-        const data = this.formatJson(filterVal, list)
-        const time = this.$moment(new Date()).format('YYYY-MM-DD')
+        const list = this.userList;
+        const data = this.formatJson(filterVal, list);
+        const time = this.$moment(new Date()).format("YYYY-MM-DD");
         // fileName: 要导出的表格名称
-        exportJsonToExcel(tHeader, data, 'UsersList' + time)
-      })
+        exportJsonToExcel(tHeader, data, "UsersList" + time);
+      });
     },
     formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]))
+      return jsonData.map(v => filterVal.map(j => v[j]));
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped></style>

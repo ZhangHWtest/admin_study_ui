@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import PanelGroup from './components/PanelGroup'
-import LineChart from './components/LineChart'
-import PieChart from './components/PieChart'
+import PanelGroup from "./components/PanelGroup";
+import LineChart from "./components/LineChart";
+import PieChart from "./components/PieChart";
 
 const lineChartData = {
   newVisitis: {
@@ -44,10 +44,10 @@ const lineChartData = {
     expectedData: [130, 140, 141, 142, 145, 150, 160],
     actualData: [120, 82, 91, 154, 162, 140, 130]
   }
-}
+};
 
 export default {
-  name: 'MonitorChart',
+  name: "MonitorChart",
   components: {
     PanelGroup,
     LineChart,
@@ -56,14 +56,14 @@ export default {
   data() {
     return {
       lineChartData: lineChartData.newVisitis
-    }
+    };
   },
   methods: {
     handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
+      this.lineChartData = lineChartData[type];
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

@@ -27,7 +27,7 @@
         <el-col :span="10">
           <el-button
             plain
-            @click=";(addDialogVisible = true), getMonitorGroups()"
+            @click="(addDialogVisible = true), getMonitorGroups()"
             >添加单个API监控</el-button
           >
           <el-button type="primary" @click="addManyDialogVisible = true"
@@ -48,12 +48,8 @@
         <el-table-column label="API名称" prop="httpName"></el-table-column>
         <el-table-column label="类型" prop="type">
           <template slot-scope="scope">
-            <font v-if="scope.row.type === 0">
-              单个api
-            </font>
-            <font v-else>
-              多个api
-            </font>
+            <font v-if="scope.row.type === 0">单个api</font>
+            <font v-else>多个api</font>
           </template>
         </el-table-column>
         <el-table-column
@@ -61,17 +57,18 @@
           width="80px"
           prop="remark"
         ></el-table-column>
-        <el-table-column label="监控表达式" width="80px" prop="jobCron">
-        </el-table-column>
+        <el-table-column
+          label="监控表达式"
+          width="80px"
+          prop="jobCron"
+        ></el-table-column>
         <el-table-column label="监控状态" width="80px">
           <template slot-scope="scope">
             <div class="apiStatus">
-              <font v-if="scope.row.enabled" color="#67C23A" class="apiActive">
-                启动中
-              </font>
-              <font v-else color="#F56C6C" class="apiNoActive">
-                未启动
-              </font>
+              <font v-if="scope.row.enabled" color="#67C23A" class="apiActive"
+                >启动中</font
+              >
+              <font v-else color="#F56C6C" class="apiNoActive">未启动</font>
             </div>
           </template>
         </el-table-column>
@@ -196,8 +193,7 @@
               :key="item.index"
               :label="item.systemName"
               :value="item.systemName"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="job名称" prop="jobName">
@@ -269,8 +265,7 @@
             v-model="createApi.conditionBody"
             class="input_with_apiCondition"
             placeholder="请输入内容"
-          >
-          </el-input>
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="备注">
@@ -296,7 +291,7 @@ export default {
     return {
       // 搜索绑定数据
       findMonitorBody: {
-        monitorName: '',
+        monitorName: "",
         pageNum: 1,
         pageSize: 10
       },
@@ -308,39 +303,39 @@ export default {
       // -------------------------------
       // 批量添加弹框里的table
       postmanTableHead: [
-        { column_name: 'mobile', column_comment: 'API类型' },
-        { column_name: 'name', column_comment: 'API地址' },
-        { column_name: 'nickName', column_comment: '概况' }
+        { column_name: "mobile", column_comment: "API类型" },
+        { column_name: "name", column_comment: "API地址" },
+        { column_name: "nickName", column_comment: "概况" }
       ],
       postmanApiList: [
         {
-          name: 'name',
-          nickName: 'nickName',
-          mobile: 'mobile'
+          name: "name",
+          nickName: "nickName",
+          mobile: "mobile"
         }
       ],
       // 添加API表单的校验对象
       addRulesMonitorForm: {
         systemName: [{ required: true }],
         jobName: [
-          { required: true, message: '请输入Job名称', trigger: 'blur' }
+          { required: true, message: "请输入Job名称", trigger: "blur" }
         ],
         httpName: [
-          { required: true, message: '请输入api名称', trigger: 'blur' }
+          { required: true, message: "请输入api名称", trigger: "blur" }
         ],
         httpMethod: [{ required: true }],
         httpUrl: [
-          { required: true, message: '请输入api地址', trigger: 'blur' }
+          { required: true, message: "请输入api地址", trigger: "blur" }
         ],
-        jobCron: [{ required: true, trigger: 'blur' }],
-        conditionType: [{ required: true, trigger: 'blur' }],
-        conditionBody: [{ required: true, trigger: 'blur' }]
+        jobCron: [{ required: true, trigger: "blur" }],
+        conditionType: [{ required: true, trigger: "blur" }],
+        conditionBody: [{ required: true, trigger: "blur" }]
       },
 
-      radioApiType: '0',
-      radioApiTime: '0/15 * * * * ?',
-      apiConditionType: '0',
-      apiCondition: '',
+      radioApiType: "0",
+      radioApiTime: "0/15 * * * * ?",
+      apiConditionType: "0",
+      apiCondition: "",
       // 监听添加弹窗事件
       addDialogVisible: false,
       addManyDialogVisible: false,
@@ -350,106 +345,106 @@ export default {
       select: [],
       // 新增api对象
       createApi: {
-        systemName: '',
-        jobName: '',
-        httpName: '',
-        type: '',
-        remark: '',
-        jobCron: '',
-        httpUrl: '',
-        httpMethod: '',
-        httpHeaders: '',
-        httpBody: '',
-        conditionType: '',
-        conditconditionBodyion: ''
+        systemName: "",
+        jobName: "",
+        httpName: "",
+        type: "",
+        remark: "",
+        jobCron: "",
+        httpUrl: "",
+        httpMethod: "",
+        httpHeaders: "",
+        httpBody: "",
+        conditionType: "",
+        conditconditionBodyion: ""
       },
       groupsList: {},
       enableMonitorBody: {
-        jobId: '',
-        enabled: ''
+        jobId: "",
+        enabled: ""
       }
-    }
+    };
   },
   created() {
-    this.getMonitorList()
+    this.getMonitorList();
   },
   methods: {
     async getMonitorList() {
       const { data: monitorRes } = await this.$api.monitor.monitorList(
         this.findMonitorBody
-      )
-      console.log(monitorRes)
+      );
+      console.log(monitorRes);
       if (monitorRes.code !== 200) {
-        return this.$message.error('获取监控列表失败！')
+        return this.$message.error("获取监控列表失败！");
       }
-      this.monitorList = monitorRes.data.monitor
-      this.total = monitorRes.data.total
+      this.monitorList = monitorRes.data.monitor;
+      this.total = monitorRes.data.total;
     },
     // 监听pagesize改变的事件
     handleSizeChange(newSize) {
-      this.findMonitorBody.pageSize = newSize
-      this.getMonitorList()
+      this.findMonitorBody.pageSize = newSize;
+      this.getMonitorList();
     },
     // 监听 页码值改变的事件
     handleCurrentChange(newPage) {
-      this.findMonitorBody.pageNum = newPage
-      this.getMonitorList()
+      this.findMonitorBody.pageNum = newPage;
+      this.getMonitorList();
     },
     addDialogClosed() {
-      this.$refs.addApiFormRef.resetFields()
+      this.$refs.addApiFormRef.resetFields();
     },
     addManyDialogClosed() {
-      this.$refs.addApiFormRef.resetFields()
+      this.$refs.addApiFormRef.resetFields();
     },
     async addSingleApi() {
-      this.createApi.type = '0'
-      this.createApi.httpMethod = this.radioApiType
-      this.createApi.jobCron = this.radioApiTime
+      this.createApi.type = "0";
+      this.createApi.httpMethod = this.radioApiType;
+      this.createApi.jobCron = this.radioApiTime;
       const { data: addMonitorRes } = await this.$api.monitor.saveSingle(
         this.createApi
-      )
+      );
       // 返回信息校验
       if (addMonitorRes.code !== 200) {
-        return this.$message.error('新增失败！')
+        return this.$message.error("新增失败！");
       }
       // 关闭 添加弹框
-      this.addDialogVisible = false
+      this.addDialogVisible = false;
     },
     async getMonitorGroups() {
-      const { data: getMGRes } = await this.$api.monitor.getMonitorGroupsApi()
-      this.groupsList = getMGRes.data
+      const { data: getMGRes } = await this.$api.monitor.getMonitorGroupsApi();
+      this.groupsList = getMGRes.data;
     },
     async addMonitorGroups() {
-      const { data: getMGRes } = await this.$api.monitor.getMonitorGroupsApi()
-      this.groupsList = getMGRes.data
+      const { data: getMGRes } = await this.$api.monitor.getMonitorGroupsApi();
+      this.groupsList = getMGRes.data;
     },
     async enableMonitor(scope) {
-      console.log(scope, 'scope')
+      console.log(scope, "scope");
       if (scope.row.enabled === 1) {
-        this.enableMonitorBody.enabled = 0
+        this.enableMonitorBody.enabled = 0;
       } else {
-        this.enableMonitorBody.enabled = 1
+        this.enableMonitorBody.enabled = 1;
       }
-      this.enableMonitorBody.jobId = scope.row.jobId
+      this.enableMonitorBody.jobId = scope.row.jobId;
       const { data: getMGRes } = await this.$api.monitor.enableMonitorApi(
         this.enableMonitorBody
-      )
-      console.log(getMGRes)
+      );
+      console.log(getMGRes);
       if (getMGRes.code === 200) {
-        this.getMonitorList()
-        return this.$message.success('修改成功！')
+        this.getMonitorList();
+        return this.$message.success("修改成功！");
       }
-      return this.$message.error('修改失败！')
+      return this.$message.error("修改失败！");
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
 .apiStatus {
   padding-left: 10px;
   .apiActive::before {
-    content: '';
+    content: "";
     display: block;
     width: 10px;
     height: 10px;
@@ -461,7 +456,7 @@ export default {
     transform: translate(-50%, -50%);
   }
   .apiNoActive::before {
-    content: '';
+    content: "";
     display: block;
     width: 10px;
     height: 10px;

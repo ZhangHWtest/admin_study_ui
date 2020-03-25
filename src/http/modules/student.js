@@ -1,4 +1,4 @@
-import { requestTwo } from '../axios'
+import { requestTwo } from "../axios";
 
 /*
  * 学生列表
@@ -6,8 +6,8 @@ import { requestTwo } from '../axios'
 
 export const findStudentList = data => {
   return requestTwo({
-    url: '/zt/mobile',
-    method: 'post',
+    url: "/zt/mobile",
+    method: "post",
     data
-  })
-}
+  });
+};

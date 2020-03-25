@@ -9,7 +9,7 @@
         <div>
           <span>测试部API监控后台 </span>
         </div>
-      </el-header> -->
+      </el-header>-->
       <!-- 登录表单区域 -->
       <el-form
         ref="loginFormRef"
@@ -43,38 +43,38 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
       loginForm: {
-        name: 'admin',
-        password: '123456'
+        name: "admin",
+        password: "123456"
       },
       loginFormRules: {
-        name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
-    }
+    };
   },
   methods: {
     resetLoginForm() {
-      this.$refs.loginFormRef.resetFields()
+      this.$refs.loginFormRef.resetFields();
     },
     login() {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid);
-        const { data: res } = await this.$api.login.login(this.loginForm)
+        const { data: res } = await this.$api.login.login(this.loginForm);
         if (res.code !== 200)
-          return this.$message.error('登录失败！请检查账号信息！')
-        window.sessionStorage.setItem('loginName', res.data.name)
-        window.sessionStorage.setItem('token', res.data.token)
-        Cookies.set('token', res.data.token)
-        this.$router.push('/home')
-      })
+          return this.$message.error("登录失败！请检查账号信息！");
+        window.sessionStorage.setItem("loginName", res.data.name);
+        window.sessionStorage.setItem("token", res.data.token);
+        Cookies.set("token", res.data.token);
+        this.$router.push("/home");
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

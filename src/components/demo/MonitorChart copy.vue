@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { Chart } from 'highcharts-vue'
+import { Chart } from "highcharts-vue";
 export default {
   components: {
     highcharts: Chart
@@ -39,43 +39,43 @@ export default {
     return {
       options: [
         {
-          value: '选项1',
-          label: '黄金糕'
+          value: "选项1",
+          label: "黄金糕"
         },
         {
-          value: '选项2',
-          label: '双皮奶'
+          value: "选项2",
+          label: "双皮奶"
         },
         {
-          value: '选项3',
-          label: '蚵仔煎'
+          value: "选项3",
+          label: "蚵仔煎"
         },
         {
-          value: '选项4',
-          label: '龙须面'
+          value: "选项4",
+          label: "龙须面"
         },
         {
-          value: '选项5',
-          label: '北京烤鸭'
+          value: "选项5",
+          label: "北京烤鸭"
         }
       ],
-      value: '',
+      value: "",
       chartOptions: {
         title: {
-          text: 'API监控结果'
+          text: "API监控结果"
         },
         subtitle: {
-          text: '数据来源：thesolarfoundation.com'
+          text: "数据来源：thesolarfoundation.com"
         },
         yAxis: {
           title: {
-            text: '就业人数'
+            text: "就业人数"
           }
         },
         legend: {
-          layout: 'vertical',
-          align: 'right',
-          verticalAlign: 'middle'
+          layout: "vertical",
+          align: "right",
+          verticalAlign: "middle"
         },
         plotOptions: {
           series: {
@@ -87,23 +87,23 @@ export default {
         },
         series: [
           {
-            name: '安装，实施人员',
+            name: "安装，实施人员",
             data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
           },
           {
-            name: '工人',
+            name: "工人",
             data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
           },
           {
-            name: '销售',
+            name: "销售",
             data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
           },
           {
-            name: '项目开发',
+            name: "项目开发",
             data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
           },
           {
-            name: '其他',
+            name: "其他",
             data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
           }
         ],
@@ -115,23 +115,23 @@ export default {
               },
               chartOptions: {
                 legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom'
+                  layout: "horizontal",
+                  align: "center",
+                  verticalAlign: "bottom"
                 }
               }
             }
           ]
         }
       }
-    }
+    };
   },
   methods: {
     myCallback() {
-      console.log('this is callback function')
+      console.log("this is callback function");
     }
   }
-}
+};
 </script>
 
 <style scoped>

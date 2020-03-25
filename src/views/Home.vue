@@ -115,9 +115,9 @@ export default {
       menulist: [],
       isCollapse: false,
       // 被激活的链接地址
-      activePath: '',
+      activePath: "",
       loginname: {
-        name: ''
+        name: ""
       },
       updatePasword: false,
       updatePaswordUser: {
@@ -127,69 +127,71 @@ export default {
         checkPassword: []
       },
       updatePaswordRulesForm: {
-        password: [{ required: true, message: '原始密码', trigger: 'blur' }],
-        newPassword: [{ required: true, message: '新密码', trigger: 'blur' }],
+        password: [{ required: true, message: "原始密码", trigger: "blur" }],
+        newPassword: [{ required: true, message: "新密码", trigger: "blur" }],
         checkPassword: [
-          { required: true, message: '再次确认密码', trigger: 'blur' }
+          { required: true, message: "再次确认密码", trigger: "blur" }
         ]
       }
-    }
+    };
   },
   created() {
-    this.getMenuList()
-    this.activePath = window.sessionStorage.getItem('activePath')
-    this.loginname.name = window.sessionStorage.getItem('loginName')
+    this.getMenuList();
+    this.activePath = window.sessionStorage.getItem("activePath");
+    this.loginname.name = window.sessionStorage.getItem("loginName");
   },
   methods: {
     logout() {
-      window.sessionStorage.clear()
-      this.$router.push('/login')
+      window.sessionStorage.clear();
+      this.$router.push("/login");
     },
     // 获取所有的菜单
     async getMenuList() {
-      const { data: res } = await this.$api.menu.findNavTree()
+      const { data: res } = await this.$api.menu.findNavTree();
       if (res.code === 200) {
-        return (this.menulist = res.data)
+        return (this.menulist = res.data);
       } else if (res.code === 20003) {
-        this.$message.error('登录失效，请重新登录！')
-        return this.$router.push('/login')
+        this.$message.error("登录失效，请重新登录！");
+        return this.$router.push("/login");
       }
     },
     // 点击按钮切换菜单的折叠与展开
     toggleCollapse() {
-      this.isCollapse = !this.isCollapse
+      this.isCollapse = !this.isCollapse;
     },
     // 保存链接的激活状态
     saveNavState(activePath) {
-      window.sessionStorage.setItem('activePath', activePath)
-      this.activePath = activePath
+      window.sessionStorage.setItem("activePath", activePath);
+      this.activePath = activePath;
     },
     updatePaswordClose() {
-      this.$refs.updatePaswordFormRef.resetFields()
+      this.$refs.updatePaswordFormRef.resetFields();
     },
     updatePaswordMethod() {
       this.$refs.updatePaswordFormRef.validate(async valid => {
-        if (!valid) return
-        this.updatePaswordUser.name = window.sessionStorage.getItem('loginName')
+        if (!valid) return;
+        this.updatePaswordUser.name = window.sessionStorage.getItem(
+          "loginName"
+        );
         if (
           this.updatePaswordUser.newPassword !==
           this.updatePaswordUser.checkPassword
         )
-          return this.$message.error('请检查输入！')
+          return this.$message.error("请检查输入！");
         // 校验通过可以发起添加请求了
         const { data: res } = await this.$api.user.updatepassword(
           this.updatePaswordUser
-        )
+        );
         if (res.code !== 200) {
-          this.$message.error('修改失败！')
+          this.$message.error("修改失败！");
         }
-        this.$message.success('修改成功，请重新登录！')
-        window.sessionStorage.clear()
-        this.$router.push('/login')
-      })
+        this.$message.success("修改成功，请重新登录！");
+        window.sessionStorage.clear();
+        this.$router.push("/login");
+      });
     }
   }
-}
+};
 </script>
 <style lang="less" scoped>
 .home-container {

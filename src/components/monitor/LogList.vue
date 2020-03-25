@@ -35,26 +35,26 @@ export default {
   data() {
     return {
       tableHead: [
-        { column_name: 'name', column_comment: '所属系统' },
-        { column_name: 'mobile', column_comment: '名称' },
-        { column_name: 'lastUpdateBy', column_comment: '监控时间' },
-        { column_name: 'status', column_comment: '状态' },
-        { column_name: 'lastUpdateBy', column_comment: '响应时间' },
-        { column_name: 'lastUpdateBy', column_comment: '日志' },
-        { column_name: 'lastUpdateBy', column_comment: 'API详情' }
+        { column_name: "name", column_comment: "所属系统" },
+        { column_name: "mobile", column_comment: "名称" },
+        { column_name: "lastUpdateBy", column_comment: "监控时间" },
+        { column_name: "status", column_comment: "状态" },
+        { column_name: "lastUpdateBy", column_comment: "响应时间" },
+        { column_name: "lastUpdateBy", column_comment: "日志" },
+        { column_name: "lastUpdateBy", column_comment: "API详情" }
       ],
       apiList: [
         {
-          name: 'name',
-          nickName: 'nickName',
-          mobile: 'mobile',
-          status: 'status',
-          createTime: 'createTime',
-          updateTime: 'updateTime',
-          lastUpdateBy: 'lastUpdateBy'
+          name: "name",
+          nickName: "nickName",
+          mobile: "mobile",
+          status: "status",
+          createTime: "createTime",
+          updateTime: "updateTime",
+          lastUpdateBy: "lastUpdateBy"
         }
       ]
-    }
+    };
   }
-}
+};
 </script>
