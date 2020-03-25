@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+//import monitor from './actions/monitor'
 
 //挂载Vuex
 Vue.use(Vuex)
 
-//创建VueX对象
-const store = new Vuex({
-    state:{
-        //存放的键值对就是所要管理的状态
-        name:'helloVueX'
-    }
+export default new Vuex.Store({
+  state: {
+    mes: '组件内数据'
+  },
+  mutations: {},
+  actions: {},
+  modules: {}
 })
-
-export default store

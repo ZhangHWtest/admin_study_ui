@@ -1,7 +1,9 @@
 <template>
   <!-- api列表区域-->
   <el-table border :data="monitorList">
-    <el-table-column width="50px" label="ID" prop="id"></el-table-column>
+    <el-table-column width="50px" label="ID" prop="id">{{
+      mes
+    }}</el-table-column>
     <el-table-column label="jobId" prop="jobId"></el-table-column>
     <el-table-column label="jobName">
       <template slot-scope="scope">
@@ -107,6 +109,11 @@
 
 <script>
 export default {
+  computed: {
+    mes() {
+      return this.$store.state.mes;
+    }
+  },
   data() {
     return {
       // 搜索绑定数据

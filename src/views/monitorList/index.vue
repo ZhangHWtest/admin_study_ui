@@ -9,10 +9,10 @@
     <!-- 卡片视图区域-->
     <el-card>
       <div>
-        <MonitorHandSearch v-bind:findMonitorBody="findMonitorBody" />
+        <MonitorHandSearch />
       </div>
       <div>
-        <MonitorTable :data="monitorList" />
+        <MonitorTable />
       </div>
     </el-card>
   </div>

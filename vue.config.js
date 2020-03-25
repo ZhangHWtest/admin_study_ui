@@ -6,7 +6,7 @@ module.exports = {
     process.env.NODE_ENV === 'production' ? '/production-sub-path/' : '/',
   outputDir: 'admin_study_ui',
   assetsDir: 'assets',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: true,
   filenameHashing: false,
   devServer: {
     port,

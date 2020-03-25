@@ -1,6 +1,7 @@
 <template>
   <el-row :gutter="30">
     <el-col :span="5">
+      <h2>{{mes}}</h2>
       <el-input
         v-model="findMonitorBody.monitorName"
         placeholder="请输入jobName"
@@ -28,13 +29,7 @@
 
 <script>
 export default {
-  props: {
-    findMonitorBody: {}
-  },
-  data() {
-    return {}
-  },
-  methods: {}
+
 }
 </script>
 
